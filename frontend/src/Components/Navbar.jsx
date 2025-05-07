@@ -7,14 +7,20 @@ const Navbar = () => {
   return (
     <div className='navbar'>
         <div className='logo-container'>
-            <img src={logo} alt="logo" className='logo' />
-            <span className='logo-text'>InsureSmart</span>
+            <Link to="/">
+                <img src={logo} alt="logo" className='logo' />
+                <span className='logo-text'>InsureSmart</span>
+            </Link>
         </div>
+        <div className='right-section'>
         <ul>
-            <li><Link to="/">Home</Link></li>
+            <li><Link to="/dashboard">Dashboard</Link></li>
             <li><Link to="/insurance-recommendation">Insurance Recommendation</Link></li>
             <li><Link to="/insurance-claim">Insurance Claim</Link></li>
         </ul>
+      <button className='login-button'>Login</button>
+      <button className='signup-button'>Sign Up</button>
+        </div>
     </div>
   )
 }
