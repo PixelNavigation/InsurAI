@@ -1,0 +1,218 @@
+/* Global Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f5fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header */
+.header {
+    background: #6a5acd;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.header button {
+    background-color: #fff;
+    color: #6a5acd;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+}
+
+.header button:hover {
+    background-color: #ece9ff;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 5rem 2rem;
+    background-color: #fff;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    color: #333;
+    font-weight: bold;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.hero-buttons button {
+    padding: 0.9rem 1.8rem;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hero-buttons .primary {
+    background-color: #6a5acd;
+    color: white;
+    border: none;
+}
+
+.hero-buttons .primary:hover {
+    background-color: #5544b3;
+}
+
+.hero-buttons .secondary {
+    background-color: white;
+    color: #6a5acd;
+    border: 2px solid #6a5acd;
+}
+
+.hero-buttons .secondary:hover {
+    background-color: #ece9ff;
+}
+
+/* Features Section */
+.features {
+    display: flex;
+    justify-content: space-around;
+    padding: 4rem 1rem;
+    background: #fff;
+    text-align: center;
+    flex-wrap: wrap;
+}
+
+.feature-item {
+    width: 280px;
+    padding: 2rem;
+    background: #ece9ff;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+}
+
+.feature-item h3 {
+    font-size: 1.3rem;
+    color: #333;
+}
+
+.feature-item p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Call to Action */
+.promo {
+    background-color: #6a5acd;
+    color: white;
+    text-align: center;
+    padding: 4rem 2rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.promo-content {
+    max-width: 400px;
+}
+
+.promo img {
+    width: 350px;
+    border-radius: 10px;
+}
+
+/* Footer */
+/* Footer */
+.footer {
+    background-color: #fff;
+    padding: 3rem 2rem;
+    text-align: center;
+    border-top: 2px solid #ece9ff;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 900px;
+    margin: auto;
+}
+
+.brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #6a5acd;
+}
+
+.footer-top input[type="email"] {
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 250px;
+}
+
+.footer-top button {
+    background-color: #6a5acd;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.footer-top button:hover {
+    background-color: #5544b3;
+}
+
+/* Footer Links */
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.footer-links div h4 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.footer-links div p {
+    font-size: 1rem;
+    color: #666;
+    cursor: pointer;
+}
+
+.footer-links div p:hover {
+    color: #6a5acd;
+}
+
+
+.socials a {
+    text-decoration: none;
+    font-size: 1rem;
+    color: #6a5acd;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+}
+
+.socials a:hover {
+    color: #5544b3;
+}
