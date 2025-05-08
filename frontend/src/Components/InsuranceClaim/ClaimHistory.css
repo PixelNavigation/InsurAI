@@ -1,0 +1,93 @@
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #666;
+}
+
+.empty-state p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+/* Claim Table */
+.claim-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.claim-table th,
+.claim-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.claim-table th {
+  background-color: #f7f2ff;
+  font-weight: 600;
+  color: #333;
+}
+
+.claim-table tr:last-child td {
+  border-bottom: none;
+}
+
+.claim-table tr:hover td {
+  background-color: #fafafa;
+}
+
+/* Action Button */
+.action-button {
+  background-color: #993ddb;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.action-button:hover {
+  background-color: #8431c0;
+}
+
+/* Status Badge */
+.status-badge {
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+}
+
+.status-badge.pending {
+  background-color: #f0ad4e;
+}
+
+.status-badge.approved {
+  background-color: #5cb85c;
+}
+
+.status-badge.denied {
+  background-color: #d9534f;
+}
+
+.status-badge.in-review {
+  background-color: #5bc0de;
+}
+
+/* Section Headers */
+.section-title {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid #f0e6ff;
+}

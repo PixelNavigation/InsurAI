@@ -15,7 +15,7 @@ const home = () => {
           <p>Use AI and automated claim system to spot</p>
           <p>coverage gaps and simplify complex claim process</p>
         </div>
-        <button className="banner-buttons">Try InsureAI for free</button>
+        <button className="banner-buttons">Try InsureAI for free <span className="Arrow">→</span></button>
       </section>
 
       <section className="features">

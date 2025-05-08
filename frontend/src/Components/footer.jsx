@@ -4,7 +4,7 @@ const footer = () => {
   return (
     <div><footer className="footer">
     <div className="footer-top">
-      <div className="brand">InsureSmart</div>
+      <div className="brand">InsureAI</div>
       <input type="email" placeholder="Subscribe to our newsletter" />
       <button>Subscribe</button>
     </div>

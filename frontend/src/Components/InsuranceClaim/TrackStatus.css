@@ -1,0 +1,116 @@
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #666;
+}
+
+.empty-state p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+/* Claim Cards */
+.claim-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 1.2rem;
+}
+
+.claim-card {
+  background-color: #fcfcfc;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.claim-card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.claim-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: #f7f2ff;
+  border-bottom: 1px solid #eee;
+}
+
+.claim-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.status-badge {
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+}
+
+.status-badge.pending {
+  background-color: #f0ad4e;
+}
+
+.status-badge.approved {
+  background-color: #5cb85c;
+}
+
+.status-badge.denied {
+  background-color: #d9534f;
+}
+
+.status-badge.in-review {
+  background-color: #5bc0de;
+}
+
+.claim-body {
+  padding: 1rem 1.5rem;
+}
+
+.claim-body p {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* Action Button */
+.action-button {
+  background-color: #993ddb;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.action-button:hover {
+  background-color: #8431c0;
+}
+
+/* Section Headers */
+.section-title {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid #f0e6ff;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .claim-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}

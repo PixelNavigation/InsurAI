@@ -1,83 +1,154 @@
 .toolbox {
-    max-width: 960px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-    font-family: "Segoe UI", sans-serif;
-  }
-  
-  .toolbox h2 {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .toolbox .highlight {
-    color: #0074d9;
-  }
-  
-  .toolbox-tabs {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 2rem;
-  }
-  
-  .tab-button {
-    background-color: #f0f0f0;
-    border: none;
-    margin: 0.5rem;
-    padding: 0.75rem 1.25rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .tab-button.active,
-  .tab-button:hover {
-    background-color: #0074d9;
-    color: #fff;
-  }
-  
-  .toolbox-content {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 2rem;
-    flex-wrap: wrap;
-  }
-  
-  .toolbox-text {
-    flex: 1 1 400px;
-  }
-  
-  .toolbox-text h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .toolbox-text ul {
-    list-style: none;
-    padding-left: 0;
-  }
-  
-  .toolbox-text li {
-    margin-bottom: 0.5rem;
-  }
-  
-  .toolbox-image {
-    flex: 1 1 300px;
-    text-align: center;
-  }
-  
-  .toolbox-image img {
-    max-width: 100%;
-    border-radius: 12px;
-  }
-  
+  max-width: 1080px;
+  margin: 3rem auto;
+  padding: 2.5rem;
+  background-color: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+}
+
+.toolbox h2 {
+  text-align: center;
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.toolbox .highlight {
+  color: #2563eb;
+  position: relative;
+}
+
+.toolbox .highlight::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: #2563eb;
+  border-radius: 2px;
+  opacity: 0.3;
+}
+
+.toolbox-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+}
+
+.toolbox-nav-button {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  margin: 0;
+  padding: 0.875rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+}
+
+.toolbox-nav-button.active {
+  background-color: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(37, 99, 235, 0.15);
+}
+
+.toolbox-nav-button:hover:not(.active) {
+  background-color: #f1f5f9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.toolbox-nav-button .icon {
+  font-size: 1.25rem;
+}
+
+.toolbox-content {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 3rem;
+  flex-wrap: wrap;
+  background-color: #f8fafc;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.toolbox-text {
+  flex: 1 1 400px;
+}
+
+.toolbox-text h3 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.toolbox-text p {
+  color: #64748b;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.toolbox-text ul {
+  list-style: none;
+  padding-left: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.toolbox-text li {
+  padding: 0.625rem;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease;
+}
+
+.toolbox-text li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+.toolbox-text li svg,
+.toolbox-text li span:first-child {
+  color: #2563eb;
+  flex-shrink: 0;
+}
+
+.toolbox-image {
+  flex: 1 1 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolbox-image img {
+  max-width: 100%;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.toolbox-image img:hover {
+  transform: scale(1.02);
+}

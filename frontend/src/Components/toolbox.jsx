@@ -5,8 +5,7 @@ const toolboxItems = [
   {
     id: "dashboard",
     title: "Streamlined Claims",
-    icon: "\u26A1",
-    // image: dashboardImg,
+    icon: "📎",
     features: [
       "Step-by-step guidance",
       "Faster approval rates",
@@ -18,8 +17,7 @@ const toolboxItems = [
   {
     id: "insights",
     title: "AI-Powered Insights",
-    icon: "\uD83D\uDCC5",
-    // image: insightsImg,
+    icon: "📅",
     features: [
       "Personalized recommendations",
       "Cost-saving opportunities",
@@ -31,8 +29,7 @@ const toolboxItems = [
   {
     id: "chat",
     title: "Interactive Policy Chat",
-    icon: "\uD83D\uDCAC",
-    // image: chatImg,
+    icon: "💬",
     features: [
       "Real-time policy guidance",
       "Easy-to-understand explanations",
@@ -44,8 +41,7 @@ const toolboxItems = [
   {
     id: "alerts",
     title: "Proactive Alerts",
-    icon: "\uD83D\uDD14",
-    // image: alertsImg,
+    icon: "🔔",
     features: [
       "Renewal reminders",
       "Policy change alerts",
@@ -56,7 +52,7 @@ const toolboxItems = [
   }
 ];
 
-const toolbox = () => {
+const Toolbox = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const activeItem = toolboxItems.find((item) => item.id === activeTab);
 
@@ -69,7 +65,7 @@ const toolbox = () => {
         {toolboxItems.map((item) => (
           <button
             key={item.id}
-            className={`tab-button ${activeTab === item.id ? "active" : ""}`}
+            className={`toolbox-nav-button ${activeTab === item.id ? "active" : ""}`}
             onClick={() => setActiveTab(item.id)}
           >
             <span className="icon">{item.icon}</span> {item.title}
@@ -82,16 +78,21 @@ const toolbox = () => {
           <p>{activeItem.description}</p>
           <ul>
             {activeItem.features.map((feature, idx) => (
-              <li key={idx}>✅ {feature}</li>
+              <li key={idx}>
+                <span>✅</span> {feature}
+              </li>
             ))}
           </ul>
         </div>
         <div className="toolbox-image">
-          <img src={activeItem.image} alt={activeItem.title} />
+          <img 
+            src={`/api/placeholder/400/300?text=${activeItem.title}`} 
+            alt={activeItem.title} 
+          />
         </div>
       </div>
     </div>
   );
 };
 
-export default toolbox; 
+export default Toolbox;

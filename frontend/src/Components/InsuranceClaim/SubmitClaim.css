@@ -1,0 +1,115 @@
+/* Form Styles */
+.claim-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.claim-form input,
+.claim-form select,
+.claim-form textarea {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.claim-form input:focus,
+.claim-form select:focus,
+.claim-form textarea:focus {
+  outline: none;
+  border-color: #993ddb;
+  box-shadow: 0 0 0 3px rgba(153, 61, 219, 0.15);
+}
+
+.claim-form textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Claim Types Section */
+.claim-types-container {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.claim-types-title {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.8rem;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #993ddb;
+}
+
+/* Button Styles */
+.submit-button {
+  width: fit-content;
+  background-color: #993ddb;
+  color: white;
+  padding: 0.8rem 1.8rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 10px rgba(153, 61, 219, 0.2);
+}
+
+.submit-button:hover {
+  background-color: #8431c0;
+  transform: translateY(-2px);
+}
+
+.submit-button:active {
+  transform: translateY(0);
+}
+
+/* Section Headers */
+.section-title {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid #f0e6ff;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .checkbox-grid {
+    grid-template-columns: 1fr;
+  }
+}
