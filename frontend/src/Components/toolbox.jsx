@@ -59,7 +59,7 @@ const Toolbox = () => {
   return (
     <div className="toolbox">
       <h2>
-        Meet Your Insurance <span className="highlight">Toolbox</span>
+        Your Insurance <span className="highlight">Toolbox</span>
       </h2>
       <div className="toolbox-tabs">
         {toolboxItems.map((item) => (

@@ -20,12 +20,12 @@ const footer = () => {
       </div>
       <div>
         <h4>Company</h4>
-        <p>About</p>
+        <p><a href="/about">About</a></p>
         <p>Contact</p>
       </div>
       <div>
         <h4>Policies</h4>
-        <p>Terms</p>
+        <p><a href="/terms">Terms</a></p>
         <p>Privacy</p>
       </div>
     </div>

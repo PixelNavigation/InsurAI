@@ -15,7 +15,7 @@ const home = () => {
           <p>Use AI and automated claim system to spot</p>
           <p>coverage gaps and simplify complex claim process</p>
         </div>
-        <button className="banner-buttons">Try InsureAI for free <span className="Arrow">→</span></button>
+        <a href="/login" className="banner-buttons">Try InsureAI for free <span className="Arrow">→</span></a>
       </section>
 
       <section className="features">
@@ -41,7 +41,7 @@ const home = () => {
             Take control of your financial security today. Customized insurance
             plans and peace of mind start your journey forward.
           </p>
-          <button>Join Us Now</button>
+          <button><a href="/signup">Join Us Now</a></button>
         </div>
       </section>
       <Toolbox />
