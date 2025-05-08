@@ -5,18 +5,20 @@ import Dashboard from './Pages/dashboard';
 import Navbar from './Components/Navbar';
 import InsuranceRecommendation from './Pages/InsuranceRecommendation';
 import InsuranceClaim from './Pages/InsuranceClaim';
+import Features from './Pages/Features';
 
 function App() {
 
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar />
+        <Navbar/>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/insurance-recommendation" element={<InsuranceRecommendation />} />
           <Route path="/insurance-claim" element={<InsuranceClaim />} />
+          <Route path="/Features" element={<Features />} />
         </Routes>
       </BrowserRouter>
     </div>

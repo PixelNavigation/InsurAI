@@ -9,7 +9,7 @@ const Navbar = () => {
         <div className='logo-container'>
             <Link to="/">
                 <img src={logo} alt="logo" className='logo' />
-                <span className='logo-text'>InsureSmart</span>
+                <span className='logo-text'>InsureAI</span>
             </Link>
         </div>
         <div className='right-section'>

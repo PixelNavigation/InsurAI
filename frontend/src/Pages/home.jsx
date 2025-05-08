@@ -1,14 +1,17 @@
 import React from "react";
-import "./home.css"; 
+import "./home.css";
+import Features from "./Features";
 const home = () => {
   return (
     <div className="app">
-      <section className="hero">
-        <h1>Your Personalized Insurance</h1>
-        <p>Tailored coverage and smart tools to protect what matters most.</p>
+      <section className="banner">
+        <h1>Having</h1>
+        <h1>trouble making</h1>
+        <h1>insurance decisions and claims?</h1>
+        <p>Use AI and automated claim system to spot</p>
+        <p>coverage gaps, simplify complex claim process</p>
         <div className="hero-buttons">
           <button>Join Us Now</button>
-          <button className="secondary">Request a Demo</button>
         </div>
       </section>
 
@@ -37,7 +40,9 @@ const home = () => {
           </p>
           <button>Join Us Now</button>
         </div>
+        <Features />
       </section>
+
 
       <footer className="footer">
         <div className="footer-top">
