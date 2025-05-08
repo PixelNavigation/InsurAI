@@ -5,7 +5,6 @@ import Dashboard from './Pages/dashboard';
 import Navbar from './Components/Navbar';
 import InsuranceRecommendation from './Pages/InsuranceRecommendation';
 import InsuranceClaim from './Pages/InsuranceClaim';
-import Features from './Pages/Features';
 
 function App() {
 
@@ -18,7 +17,6 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/insurance-recommendation" element={<InsuranceRecommendation />} />
           <Route path="/insurance-claim" element={<InsuranceClaim />} />
-          <Route path="/Features" element={<Features />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -1,0 +1,83 @@
+.toolbox {
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    font-family: "Segoe UI", sans-serif;
+  }
+  
+  .toolbox h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .toolbox .highlight {
+    color: #0074d9;
+  }
+  
+  .toolbox-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  
+  .tab-button {
+    background-color: #f0f0f0;
+    border: none;
+    margin: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .tab-button.active,
+  .tab-button:hover {
+    background-color: #0074d9;
+    color: #fff;
+  }
+  
+  .toolbox-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .toolbox-text {
+    flex: 1 1 400px;
+  }
+  
+  .toolbox-text h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .toolbox-text ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .toolbox-text li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .toolbox-image {
+    flex: 1 1 300px;
+    text-align: center;
+  }
+  
+  .toolbox-image img {
+    max-width: 100%;
+    border-radius: 12px;
+  }
+  

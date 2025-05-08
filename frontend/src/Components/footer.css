@@ -1,0 +1,80 @@
+.footer {
+    background-color: #fff;
+    padding: 3rem 2rem;
+    text-align: center;
+    border-top: 2px solid #ece9ff;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 900px;
+    margin: auto;
+}
+
+.brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #6a5acd;
+}
+
+.footer-top input[type="email"] {
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 250px;
+}
+
+.footer-top button {
+    background-color: #6a5acd;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.footer-top button:hover {
+    background-color: #5544b3;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.footer-links div h4 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.footer-links div p {
+    font-size: 1rem;
+    color: #666;
+    cursor: pointer;
+}
+
+.footer-links div p:hover {
+    color: #6a5acd;
+}
+
+
+.socials a {
+    text-decoration: none;
+    font-size: 1rem;
+    color: #6a5acd;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+}
+
+.socials a:hover {
+    color: #5544b3;
+}

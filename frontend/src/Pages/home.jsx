@@ -1,18 +1,21 @@
 import React from "react";
 import "./home.css";
-import Features from "./Features";
+import Toolbox from "../Components/toolbox";
+import Footer from "../Components/footer";
 const home = () => {
   return (
-    <div className="app">
+    <div className="home">
       <section className="banner">
-        <h1>Having</h1>
-        <h1>trouble making</h1>
-        <h1>insurance decisions and claims?</h1>
-        <p>Use AI and automated claim system to spot</p>
-        <p>coverage gaps, simplify complex claim process</p>
-        <div className="hero-buttons">
-          <button>Join Us Now</button>
+        <div className="banner-heading">
+          <h1>Having</h1>
+          <h1>trouble making</h1>
+          <h1><span className="S1">insurance decisions</span> and <span className="S2">claims</span>?</h1>
         </div>
+        <div className="banner-subheading">
+          <p>Use AI and automated claim system to spot</p>
+          <p>coverage gaps and simplify complex claim process</p>
+        </div>
+        <button className="banner-buttons">Try InsureAI for free</button>
       </section>
 
       <section className="features">
@@ -40,42 +43,9 @@ const home = () => {
           </p>
           <button>Join Us Now</button>
         </div>
-        <Features />
       </section>
-
-
-      <footer className="footer">
-        <div className="footer-top">
-          <div className="brand">InsureSmart</div>
-          <input type="email" placeholder="Subscribe to our newsletter" />
-          <button>Subscribe</button>
-        </div>
-        <div className="footer-links">
-          <div>
-            <h4>Product</h4>
-            <p>Pricing</p>
-          </div>
-          <div>
-            <h4>Resources</h4>
-            <p>Blog</p>
-            <p>Guides</p>
-          </div>
-          <div>
-            <h4>Company</h4>
-            <p>About</p>
-            <p>Contact</p>
-          </div>
-          <div>
-            <h4>Policies</h4>
-            <p>Terms</p>
-            <p>Privacy</p>
-          </div>
-        </div>
-        <div className="socials">
-          <span>Follow us:</span>
-          <a href="#">Fb</a> <a href="#">X</a> <a href="#">Insta</a>
-        </div>
-      </footer>
+      <Toolbox />
+      <Footer />
     </div>
   );
 }
