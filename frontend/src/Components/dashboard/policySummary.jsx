@@ -32,6 +32,7 @@ const PolicySummary = ({ aadhaar }) => {
           <thead>
             <tr>
               <th>Policy ID</th>
+              <th>Company Name</th>
               <th>Type</th>
               <th>Status</th>
               <th>Premium</th>
@@ -43,6 +44,7 @@ const PolicySummary = ({ aadhaar }) => {
             {policyData.map(policy => (
               <tr key={policy.PolicyID}>
                 <td>{policy.PolicyID}</td>
+                <td>{policy.CompanyName}</td>
                 <td>{policy.Type}</td>
                 <td>
                   <span className={`status-badge ${policy.Status.toLowerCase()}`}>

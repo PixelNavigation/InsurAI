@@ -11,6 +11,7 @@ const Login = ({ onLogin }) => {
 
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -25,7 +26,7 @@ const Login = ({ onLogin }) => {
     else if (!/\S+@\S+\.\S+/.test(formData.email)) tempErrors.email = "Email is invalid";
     
     if (!formData.password) tempErrors.password = "Password is required";
-    
+
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
@@ -34,11 +35,11 @@ const Login = ({ onLogin }) => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const success = await onLogin(formData);
-        if (success) {
+        const response = await onLogin(formData);
+        if (response && response.aadhaar) {
+          localStorage.setItem('aadhaar', response.aadhaar);
           navigate('/dashboard');
-        }
-        if (!success) {
+        } else {
           setErrors({ form: "Invalid credentials" });
         }
       } catch (error) {
@@ -55,8 +56,10 @@ const Login = ({ onLogin }) => {
           <h1>Welcome Back</h1>
           <p>Sign in to access your account</p>
         </div>
-        
+
         <form onSubmit={handleSubmit} className="login-form">
+          {errors.form && <div className="error-message">{errors.form}</div>}
+
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -70,7 +73,7 @@ const Login = ({ onLogin }) => {
             />
             {errors.email && <span className="error-message">{errors.email}</span>}
           </div>
-          
+
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
@@ -84,7 +87,7 @@ const Login = ({ onLogin }) => {
             />
             {errors.password && <span className="error-message">{errors.password}</span>}
           </div>
-          
+
           <div className="form-extras">
             <div className="remember-me">
               <input
@@ -98,10 +101,10 @@ const Login = ({ onLogin }) => {
             </div>
             <Link to="/forgot-password" className="forgot-password">Forgot password?</Link>
           </div>
-          
+
           <button type="submit" className="login-submit-btn">Sign In</button>
         </form>
-        
+
         <div className="social-login">
           <p>Or continue with</p>
           <div className="social-buttons">
@@ -119,7 +122,7 @@ const Login = ({ onLogin }) => {
             </button>
           </div>
         </div>
-        
+
         <div className="login-footer">
           <p>Don't have an account? <Link to="/signup" className="signup-link">Sign up</Link></p>
         </div>

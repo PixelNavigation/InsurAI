@@ -2,23 +2,29 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Components/Navbar';
-import Login from './components/auth/Login';
+import Login from './Components/auth/Login';
 import Signup from './Components/auth/Signup';
 import Home from './Pages/home';
-import Dashboard from './Pages/Dashboard';
+import Dashboard from './Pages/dashboard';
 import InsuranceRecommendation from './Pages/InsuranceRecommendation';
 import InsuranceClaim from './Pages/InsuranceClaim';
-  
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!localStorage.getItem('aadhaar') // ✅ keep user logged in after refresh
+  );
 
   const handleLogin = async (userData) => {
     try {
       const response = await axios.post('http://localhost:5000/api/login', userData);
+      const { aadhaar } = response.data;
       console.log("Login successful:", response.data);
+
+      // Store Aadhaar and update auth state
+      localStorage.setItem('aadhaar', aadhaar);
       setIsAuthenticated(true);
-      return { success: true };
+
+      return { success: true, aadhaar }; // ✅ return aadhaar
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);
       return { success: false, message: error.response?.data?.message || 'Login failed' };
@@ -28,9 +34,14 @@ function App() {
   const handleSignup = async (userData) => {
     try {
       const response = await axios.post('http://localhost:5000/api/signup', userData);
-      console.log("Signup successful:", response.data);
+      const { aadhaar } = response.data;
+
+      // Store Aadhaar and update auth state
+      localStorage.setItem('aadhaar', aadhaar);
       setIsAuthenticated(true);
-      return { success: true };
+
+      console.log("Signup successful:", response.data);
+      return { success: true, aadhaar };
     } catch (error) {
       console.error("Signup failed:", error.response?.data || error.message);
       return { success: false, message: error.response?.data?.message || 'Signup failed' };
@@ -40,9 +51,11 @@ function App() {
   const handleLogout = async () => {
     try {
       await axios.post('http://localhost:5000/api/logout');
-      setIsAuthenticated(false);
     } catch (error) {
       console.error("Logout failed:", error.message);
+    } finally {
+      localStorage.removeItem('aadhaar'); // Clear storage
+      setIsAuthenticated(false); // Update auth
     }
   };
 

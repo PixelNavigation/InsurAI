@@ -4,15 +4,20 @@ import QuickStat from "../Components/dashboard/quickstat";
 import PolicySummary from "../Components/dashboard/policySummary"
 import Sidebar from "../Components/dashboard/sidebar";
 import Riskassessment from "../Components/dashboard/Riskassessment";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const dashboard = () => {
-  // Example: Get aadhaar from localStorage (adjust as per your auth logic)
   const aadhaar = localStorage.getItem('aadhaar');
 
-  const claimData = [
-    { id: "CLM-78901", type: "Auto Accident", status: "Processing", amount: "$2,450", date: "Apr 25, 2025" },
-    { id: "CLM-89012", type: "Water Damage", status: "Approved", amount: "$5,800", date: "Mar 10, 2025" }
-  ];
+  const [claimData, setClaimData] = useState([]);
+
+  useEffect(() => {
+    if (!aadhaar) return;
+    axios.get(`http://localhost:5000/api/claims?aadhaar=${aadhaar}`)
+      .then(res => setClaimData(res.data.claims || []))
+      .catch(() => setClaimData([]));
+  }, [aadhaar]);
   
   const riskScores = {
     auto: 85,
@@ -46,17 +51,19 @@ const dashboard = () => {
                 {claimData.length > 0 ? (
                   <div className="claims-list">
                     {claimData.map(claim => (
-                      <div key={claim.id} className="claim-item">
+                      <div key={claim.id || claim.clmID} className="claim-item">
                         <div className="claim-header">
-                          <div className="claim-id">{claim.id}</div>
+                          <div className="claim-id">
+                            {claim.id || claim.clmID} <span className="claim-policy">(Policy: {claim.PolicyID}, {claim.CompanyName})</span>
+                          </div>
                           <div className={`claim-status ${claim.status.toLowerCase()}`}>
                             {claim.status}
                           </div>
                         </div>
                         <div className="claim-details">
-                          <div className="claim-type">{claim.type}</div>
-                          <div className="claim-date">Filed on: {claim.date}</div>
-                          <div className="claim-amount">Amount: {claim.amount}</div>
+                          <div className="claim-type">{claim.type || claim.Type}</div>
+                          <div className="claim-date">Filed on: {claim.date || claim.FiledDate}</div>
+                          <div className="claim-amount">Amount: {claim.amount || claim.Amount}</div>
                         </div>
                         <button className="secondary-button">View Details</button>
                       </div>
