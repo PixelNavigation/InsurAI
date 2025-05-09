@@ -35,7 +35,7 @@ a:hover {
 /* Dashboard Container */
 .dashboard-container {
   max-width: 1440px;
-  margin:  auto;
+  margin: auto;
   margin-top: 7rem;
   padding: 1.5rem;
   background-color: #f9fafb;
@@ -106,7 +106,7 @@ a:hover {
   font-size: 0.9rem;
 }
 
-.user-plan {
+.user-email {
   font-size: 0.8rem;
   color: #6b7280;
 }
