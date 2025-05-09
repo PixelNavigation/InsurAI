@@ -1,6 +1,8 @@
 from flask import Flask, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+import random
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}},
@@ -19,11 +21,12 @@ class User(db.Model):
     name= db.Column(db.String(50), nullable=False)
     email= db.Column(db.String(50), nullable=False, unique=True)
     password= db.Column(db.String(50), nullable=False)
+    policies = db.relationship('policyData', backref='user', lazy=True)
 
 
 class policyData(db.Model):
-    email = db.Column(db.String(50), db.ForeignKey('user.email'), primary_key=True)
     PolicyID = db.Column(db.Integer, primary_key=True)
+    aadhaar = db.Column(db.String(12), db.ForeignKey('user.aadhaar'), nullable=False)
     Type = db.Column(db.String(50), nullable=False)
     Status = db.Column(db.String(50), nullable=False)
     Premium = db.Column(db.String(50), nullable=False)
@@ -46,6 +49,26 @@ def signup_user():
     )
     db.session.add(new_user)
     db.session.commit()
+
+    # Randomly add 2 to 4 policies for the new user
+    policy_types = ['Health', 'Life', 'Auto', 'Home', 'Travel']
+    policy_statuses = ['Active', 'Expired', 'Pending']
+    for _ in range(random.randint(2, 4)):
+        p_type = random.choice(policy_types)
+        p_status = random.choice(policy_statuses)
+        p_premium = str(random.randint(1000, 25000))
+        start_date = datetime.now() - timedelta(days=random.randint(0, 365))
+        renewal_date = start_date + timedelta(days=365)
+        policy = policyData(
+            aadhaar=new_user.aadhaar,
+            Type=p_type,
+            Status=p_status,
+            Premium=p_premium,
+            StartDate=start_date.strftime('%Y-%m-%d'),
+            RenewalDate=renewal_date.strftime('%Y-%m-%d')
+        )
+        db.session.add(policy)
+    db.session.commit()
     return {'message': 'User created successfully'}, 201
 
 @app.route('/api/login', methods=['POST'])
@@ -60,6 +83,7 @@ def login_user():
 @app.route('/api/logout', methods=['POST'])
 def logout_user():
     return {'message': 'Logout successful'}, 200
+
 
 with app.app_context():
     db.create_all()
