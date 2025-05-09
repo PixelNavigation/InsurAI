@@ -7,6 +7,7 @@ const Signup = ({ onSignup }) => {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
+    aadhaar: '',
     password: '',
     confirmPassword: '',
     agreeTerms: false
@@ -30,6 +31,8 @@ const Signup = ({ onSignup }) => {
     if (!formData.fullName) tempErrors.fullName = "Full name is required";
     if (!formData.email) tempErrors.email = "Email is required";
     else if (!/\S+@\S+\.\S+/.test(formData.email)) tempErrors.email = "Email is invalid";
+    if (!formData.aadhaar) tempErrors.aadhaar = "Aadhaar is required";
+    else if (!/^\d{12}$/.test(formData.aadhaar)) tempErrors.aadhaar = "Aadhaar must be 12 digits";
     if (!formData.password) tempErrors.password = "Password is required";
     else if (formData.password.length < 8) tempErrors.password = "Password must be at least 8 characters";
     if (!formData.confirmPassword) tempErrors.confirmPassword = "Please confirm your password";
@@ -50,6 +53,7 @@ const Signup = ({ onSignup }) => {
     const userData = {
       fullName: formData.fullName,
       email: formData.email,
+      aadhaar: formData.aadhaar,
       password: formData.password
     };
 
@@ -104,6 +108,21 @@ const Signup = ({ onSignup }) => {
               className={errors.email ? "error" : ""}
             />
             {errors.email && <span className="error-message">{errors.email}</span>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="aadhaar">Aadhaar Number</label>
+            <input
+              type="text"
+              id="aadhaar"
+              name="aadhaar"
+              value={formData.aadhaar}
+              onChange={handleChange}
+              placeholder="Enter your 12-digit Aadhaar number"
+              maxLength={12}
+              className={errors.aadhaar ? "error" : ""}
+            />
+            {errors.aadhaar && <span className="error-message">{errors.aadhaar}</span>}
           </div>
 
           <div className="form-group">

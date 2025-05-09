@@ -15,17 +15,35 @@ db = SQLAlchemy()
 db.init_app(app)
 
 class User(db.Model):
-    id= db.Column(db.Integer, primary_key=True)
+    aadhaar = db.Column(db.String(12), nullable=False, primary_key=True)
     name= db.Column(db.String(50), nullable=False)
     email= db.Column(db.String(50), nullable=False, unique=True)
     password= db.Column(db.String(50), nullable=False)
+
+
+class policyData(db.Model):
+    email = db.Column(db.String(50), db.ForeignKey('user.email'), primary_key=True)
+    PolicyID = db.Column(db.Integer, primary_key=True)
+    Type = db.Column(db.String(50), nullable=False)
+    Status = db.Column(db.String(50), nullable=False)
+    Premium = db.Column(db.String(50), nullable=False)
+    StartDate = db.Column(db.String(50), nullable=False)
+    RenewalDate = db.Column(db.String(50), nullable=False)
+    
 
 @app.route('/api/signup', methods=['POST'])
 def signup_user():
     data = request.get_json()
     if User.query.filter_by(email=data['email']).first():
         return {'message': 'User already exists'}, 400
-    new_user = User(name=data['fullName'], email=data['email'], password=data['password'])
+    if User.query.filter_by(aadhaar=data['aadhaar']).first():
+        return {'message': 'Aadhaar already registered'}, 400
+    new_user = User(
+        name=data['fullName'],
+        email=data['email'],
+        aadhaar=data['aadhaar'],
+        password=data['password']
+    )
     db.session.add(new_user)
     db.session.commit()
     return {'message': 'User created successfully'}, 201

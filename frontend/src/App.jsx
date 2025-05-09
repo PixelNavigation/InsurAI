@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
-import Navbar from './components/Navbar';
+import Navbar from './Components/Navbar';
 import Login from './components/auth/Login';
-import Signup from './components/auth/Signup';
+import Signup from './Components/auth/Signup';
 import Home from './Pages/home';
 import Dashboard from './Pages/Dashboard';
 import InsuranceRecommendation from './Pages/InsuranceRecommendation';
