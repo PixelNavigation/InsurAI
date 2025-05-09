@@ -6,7 +6,9 @@ import Sidebar from "../Components/dashboard/sidebar";
 import Riskassessment from "../Components/dashboard/Riskassessment";
 
 const dashboard = () => {
-  
+  // Example: Get aadhaar from localStorage (adjust as per your auth logic)
+  const aadhaar = localStorage.getItem('aadhaar');
+
   const claimData = [
     { id: "CLM-78901", type: "Auto Accident", status: "Processing", amount: "$2,450", date: "Apr 25, 2025" },
     { id: "CLM-89012", type: "Water Damage", status: "Approved", amount: "$5,800", date: "Mar 10, 2025" }
@@ -33,7 +35,7 @@ const dashboard = () => {
         <div className="dashboard-sections">
           <div className="main-sections">
             
-            <PolicySummary/>
+            <PolicySummary aadhaar={aadhaar} />
             
             <div className="dashboard-card recent-claims">
               <div className="card-header">

@@ -32,6 +32,7 @@ class policyData(db.Model):
     Premium = db.Column(db.String(50), nullable=False)
     StartDate = db.Column(db.String(50), nullable=False)
     RenewalDate = db.Column(db.String(50), nullable=False)
+    __tablename__ = 'policydata'
     
 
 @app.route('/api/signup', methods=['POST'])
@@ -50,9 +51,8 @@ def signup_user():
     db.session.add(new_user)
     db.session.commit()
 
-    # Randomly add 2 to 4 policies for the new user
     policy_types = ['Health', 'Life', 'Auto', 'Home', 'Travel']
-    policy_statuses = ['Active', 'Expired', 'Pending']
+    policy_statuses = ['Active', 'Expired']
     for _ in range(random.randint(2, 4)):
         p_type = random.choice(policy_types)
         p_status = random.choice(policy_statuses)
@@ -84,10 +84,30 @@ def login_user():
 def logout_user():
     return {'message': 'Logout successful'}, 200
 
+@app.route('/api/policies', methods=['GET'])
+def get_policies():
+    aadhaar = request.args.get('aadhaar')
+    if not aadhaar:
+        return {'message': 'Aadhaar is required'}, 400
+    user = User.query.filter_by(aadhaar=aadhaar).first()
+    if not user:
+        return {'message': 'User not found'}, 404
+    policies = policyData.query.filter_by(aadhaar=aadhaar).all()
+    policies_list = [
+        {
+            'PolicyID': p.PolicyID,
+            'Type': p.Type,
+            'Status': p.Status,
+            'Premium': p.Premium,
+            'StartDate': p.StartDate,
+            'RenewalDate': p.RenewalDate
+        }
+        for p in policies
+    ]
+    return {'policies': policies_list}, 200
 
 with app.app_context():
     db.create_all()
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
-

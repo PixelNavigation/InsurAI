@@ -1,4 +1,4 @@
-import React from "react";
+import './Riskassessment.css';
 
 const Riskassessment = ({ riskScores }) => (
     <div className="risk-section dashboard-card">

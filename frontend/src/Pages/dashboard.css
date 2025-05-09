@@ -62,111 +62,6 @@ a:hover {
   gap: 1rem;
 }
 
-.notification-bell {
-  position: relative;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.notification-badge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background-color: #ef4444;
-  color: white;
-  font-size: 0.75rem;
-  font-weight: bold;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.user-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #3b82f6;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-}
-
-.user-details {
-  display: flex;
-  flex-direction: column;
-}
-
-.user-name {
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.user-email {
-  font-size: 0.8rem;
-  color: #6b7280;
-}
-
-/* Quick Stats Section */
-.quick-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.stat-card {
-  background-color: #ffffff;
-  padding: 1.25rem;
-  border-radius: 0.375rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s;
-}
-
-.stat-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.stat-icon {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.stat-title {
-  font-size: 0.9rem;
-  color: #6b7280;
-  margin-bottom: 0.5rem;
-}
-
-.stat-value {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin-bottom: 0.25rem;
-}
-
-.stat-comparison {
-  font-size: 0.8rem;
-  color: #6b7280;
-}
-
-.stat-up {
-  color: #10b981;
-}
-
-.stat-down {
-  color: #ef4444;
-}
-
-.stat-amount {
-  font-size: 1rem;
-  font-weight: 500;
-}
-
 /* Dashboard Content */
 .dashboard-content {
   margin-bottom: 2rem;
@@ -186,12 +81,6 @@ a:hover {
 }
 
 .main-sections {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.sidebar-sections {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -222,75 +111,7 @@ a:hover {
   padding: 1.5rem;
 }
 
-/* Policy Table */
-.policy-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.policy-table th {
-  text-align: left;
-  padding: 0.75rem 1rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #6b7280;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.policy-table td {
-  padding: 1rem;
-  border-bottom: 1px solid #e5e7eb;
-  font-size: 0.9rem;
-}
-
-.policy-table tr:last-child td {
-  border-bottom: none;
-}
-
-.status-badge {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.status-badge.active {
-  background-color: rgba(16, 185, 129, 0.1);
-  color: #10b981;
-}
-
-.status-badge.pending {
-  background-color: rgba(245, 158, 11, 0.1);
-  color: #f59e0b;
-}
-
-.status-badge.expired {
-  background-color: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-}
-
 /* Action Buttons */
-.action-buttons {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.icon-button {
-  padding: 0.25rem 0.5rem;
-  background-color: transparent;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
-  transition: all 0.3s;
-}
-
-.icon-button:hover {
-  background-color: #3b82f6;
-  color: white;
-  border-color: #3b82f6;
-}
-
 .action-button {
   background-color: #3b82f6;
   color: white;
@@ -303,35 +124,6 @@ a:hover {
 }
 
 .action-button:hover {
-  background-color: #2563eb;
-}
-
-.text-button {
-  background: none;
-  border: none;
-  color: #3b82f6;
-  font-size: 0.85rem;
-  padding: 0;
-  transition: color 0.3s;
-}
-
-.text-button:hover {
-  color: #2563eb;
-  text-decoration: underline;
-}
-
-.primary-button {
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  padding: 0.6rem 1.25rem;
-  border-radius: 0.25rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: all 0.3s;
-}
-
-.primary-button:hover {
   background-color: #2563eb;
 }
 
@@ -414,105 +206,6 @@ a:hover {
   color: #6b7280;
 }
 
-/* Notifications */
-.notification-item {
-  padding: 1rem 0;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.notification-item:last-child {
-  border-bottom: none;
-}
-
-.notification-item.unread {
-  position: relative;
-}
-
-.notification-item.unread::before {
-  content: "";
-  position: absolute;
-  left: -1.5rem;
-  top: 1.5rem;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #3b82f6;
-}
-
-.notification-message {
-  font-size: 0.9rem;
-  margin-bottom: 0.25rem;
-}
-
-.notification-date {
-  font-size: 0.8rem;
-  color: #9ca3af;
-}
-
-/* Quick Actions */
-.action-buttons-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.quick-action-button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  background-color: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.375rem;
-  font-size: 0.85rem;
-  transition: all 0.3s;
-}
-
-.quick-action-button:hover {
-  background-color: rgba(59, 130, 246, 0.05);
-  border-color: #60a5fa;
-}
-
-.action-icon {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-/* Premium Savings */
-.savings-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 1.5rem;
-}
-
-.savings-icon {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-  color: #10b981;
-}
-
-.savings-title {
-  font-size: 0.9rem;
-  color: #6b7280;
-  margin-bottom: 0.5rem;
-}
-
-.savings-amount {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #10b981;
-  margin-bottom: 0.75rem;
-}
-
-.savings-description {
-  font-size: 0.85rem;
-  color: #6b7280;
-  margin-bottom: 1.25rem;
-}
-
 /* Empty State */
 .empty-state {
   text-align: center;
@@ -521,76 +214,38 @@ a:hover {
   color: #6b7280;
 }
 
-.section-header {
+/* Recommendations */
+.recommendations-list {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.header-actions {
-  display: flex;
+  flex-direction: column;
   gap: 1rem;
 }
 
-/* Risk Assessment Styles */
-.risk-overview {
-  display: grid;
-  grid-template-columns: 250px 1fr;
-  gap: 2rem;
-  margin-bottom: 1rem;
+.recommendation-item {
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
 }
 
-@media (max-width: 768px) {
-  .risk-overview {
-    grid-template-columns: 1fr;
-  }
-}
-
-.risk-card {
-  background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  padding: 1.5rem;
-  text-align: center;
+.recommendation-header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
+  margin-bottom: 0.5rem;
 }
 
-.risk-title {
-  font-size: 1rem;
+.recommendation-title {
   font-weight: 600;
-  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
 }
 
-.risk-score-circle {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: conic-gradient(
-    #10b981 0% 86%,
-    #e5e7eb 86% 100%
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  margin-bottom: 1rem;
+.recommendation-impact {
+  color: #10b981;
+  font-weight: 600;
+  font-size: 0.85rem;
 }
 
-.risk-score-circle::before {
-  content: "";
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background-color: white;
-}
-
-.risk-score {
-  position: relative;
-  font-size: 2.25rem;
-  font-weight: 700;
-  color: #1f2937;
+.recommendation-description {
+  font-size: 0.85rem;
+  color: #6b7280;
 }

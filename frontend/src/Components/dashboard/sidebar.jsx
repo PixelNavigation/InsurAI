@@ -1,3 +1,5 @@
+import './sidebar.css';
+
 const icons = {
   policies: "📋",
   claims: "📝",

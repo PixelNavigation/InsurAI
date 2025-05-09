@@ -1,3 +1,5 @@
+import './quickstat.css';
+
 const icons = {
   policies: "📋",
   claims: "📝",
