@@ -46,11 +46,6 @@
   color: #ef4444;
 }
 
-/* Action Buttons */
-.action-buttons {
-  display: flex;
-  gap: 0.5rem;
-}
 
 .icon-button {
   padding: 0.25rem 0.5rem;

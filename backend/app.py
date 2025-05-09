@@ -84,7 +84,7 @@ def signup_user():
 
     # Create 2 to 3 random claims, at least one with status 'Rejected'
     policies = policyData.query.filter_by(aadhaar=new_user.aadhaar).all()
-    claim_statuses = ['Approved', 'Pending', 'Rejected']
+    claim_statuses = ['Approved', 'Processing', 'Rejected']
     num_claims = random.randint(2, 3)
     used_policy_ids = set()
     # Ensure at least one claim is 'Rejected'

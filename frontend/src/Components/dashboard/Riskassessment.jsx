@@ -4,7 +4,6 @@ const Riskassessment = ({ riskScores }) => (
     <div className="risk-section dashboard-card">
         <div className="card-header">
             <h3>Risk Assessment</h3>
-            <button className="secondary-button">Update Information</button>
         </div>
 
         <div className="card-divider"></div>

@@ -6,7 +6,6 @@ import Login from './Components/auth/Login';
 import Signup from './Components/auth/Signup';
 import Home from './Pages/home';
 import Dashboard from './Pages/dashboard';
-import InsuranceRecommendation from './Pages/InsuranceRecommendation';
 import InsuranceClaim from './Pages/InsuranceClaim';
 
 function App() {
@@ -78,14 +77,6 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/insurance-recommendation" 
-          element={
-            <ProtectedRoute>
-              <InsuranceRecommendation />
             </ProtectedRoute>
           } 
         />

@@ -50,7 +50,6 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
           {isAuthenticated && (
             <>
               <li><Link to="/dashboard">Dashboard</Link></li>
-              <li><Link to="/insurance-recommendation">Insurance Recommendation</Link></li>
               <li><Link to="/insurance-claim">Insurance Claim</Link></li>
             </>
           )}

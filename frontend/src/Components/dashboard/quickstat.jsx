@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import './quickstat.css';
 
 const icons = {
@@ -7,60 +9,63 @@ const icons = {
   payment: "💵"
 };
 
-const quickStat = () => {
+const quickstat = () => {
+  const aadhaar = localStorage.getItem('aadhaar');
+  const [policyData, setPolicyData] = useState([]);
+  const [claimData, setClaimData] = useState([]);
+  const [nextPayment, setNextPayment] = useState('');
 
-  const userData = {
-    name: "John Smith",
-    email: "john.smith@example.com",
-    avatar: "JS",
-    plan: "Premium Plan",
-    nextPayment: "May 15, 2025"
-  };
-
-  const policyData = [
-    { id: "POL-12345", type: "Auto Insurance", status: "Active", premium: "$125/month", renewalDate: "Jun 30, 2025" },
-    { id: "POL-23456", type: "Home Insurance", status: "Active", premium: "$210/month", renewalDate: "Aug 15, 2025" },
-    { id: "POL-34567", type: "Life Insurance", status: "Active", premium: "$95/month", renewalDate: "Dec 01, 2025" }
-  ];
-
-  const claimData = [
-    { id: "CLM-78901", type: "Auto Accident", status: "Processing", amount: "$2,450", date: "Apr 25, 2025" },
-    { id: "CLM-89012", type: "Water Damage", status: "Approved", amount: "$5,800", date: "Mar 10, 2025" }
-  ];
+  useEffect(() => {
+    if (!aadhaar) return;
+    axios.get(`http://localhost:5000/api/policies?aadhaar=${aadhaar}`)
+      .then(res => {
+        setPolicyData(res.data.policies || []);
+        // Find the next renewal date for active policies
+        const activePolicies = (res.data.policies || []).filter(p => p.Status === 'Active');
+        if (activePolicies.length > 0) {
+          // Find the soonest renewal date
+          const next = activePolicies.reduce((min, p) => {
+            return new Date(p.RenewalDate) < new Date(min.RenewalDate) ? p : min;
+          }, activePolicies[0]);
+          setNextPayment(next.RenewalDate);
+        } else {
+          setNextPayment('N/A');
+        }
+      })
+      .catch(() => setPolicyData([]));
+    axios.get(`http://localhost:5000/api/claims?aadhaar=${aadhaar}`)
+      .then(res => setClaimData(res.data.claims || []))
+      .catch(() => setClaimData([]));
+  }, [aadhaar]);
 
   return (
-
-    
     <div className="quick-stats">
         <div className="stat-card active-policies">
           <div className="stat-icon">{icons.policies}</div>
           <div className="stat-title">Active Policies</div>
-          <div className="stat-value">{policyData.filter(p => p.status === "Active").length}</div>
-          <div className="stat-comparison stat-up">+1 from last month</div>
+          <div className="stat-value">{policyData.filter(p => p.Status === "Active").length}</div>
+          <div className="stat-comparison stat-up">{/* TODO: Add comparison logic if needed */}</div>
         </div>
-        
         <div className="stat-card pending-claims">
           <div className="stat-icon">{icons.claims}</div>
           <div className="stat-title">Pending Claims</div>
           <div className="stat-value">{claimData.filter(c => c.status === "Processing").length}</div>
-          <div className="stat-comparison">No change</div>
+          <div className="stat-comparison">{/* TODO: Add comparison logic if needed */}</div>
         </div>
-        
         <div className="stat-card coverage-health">
           <div className="stat-icon">{icons.coverage}</div>
           <div className="stat-title">Coverage Health</div>
-          <div className="stat-value">87%</div>
+          <div className="stat-value">78%</div>
           <div className="stat-comparison stat-up">+3% from last assessment</div>
         </div>
-        
         <div className="stat-card payment-due">
           <div className="stat-icon">{icons.payment}</div>
           <div className="stat-title">Next Payment</div>
-          <div className="stat-value">{userData.nextPayment}</div>
-          <div className="stat-amount">$430 total</div>
+          <div className="stat-value">{nextPayment}</div>
+          <div className="stat-amount">{/* TODO: Calculate total payment if needed */}</div>
         </div>
       </div>
   )
 }
 
-export default quickStat
+export default quickstat;

@@ -4,6 +4,7 @@ import QuickStat from "../Components/dashboard/quickstat";
 import PolicySummary from "../Components/dashboard/policySummary"
 import Sidebar from "../Components/dashboard/sidebar";
 import Riskassessment from "../Components/dashboard/Riskassessment";
+import { Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -45,7 +46,7 @@ const dashboard = () => {
             <div className="dashboard-card recent-claims">
               <div className="card-header">
                 <h3>Recent Claims</h3>
-                <button className="action-button">File New Claim</button>
+                <button className="action-button"><Link to="/insurance-claim">File New Claim</Link></button>
               </div>
               <div className="card-content">
                 {claimData.length > 0 ? (
@@ -65,7 +66,7 @@ const dashboard = () => {
                           <div className="claim-date">Filed on: {claim.date || claim.FiledDate}</div>
                           <div className="claim-amount">Amount: {claim.amount || claim.Amount}</div>
                         </div>
-                        <button className="secondary-button">View Details</button>
+                        {claim.status && claim.status.toLowerCase() === 'rejected' && (<button className="secondary-button">View Details</button>)}
                       </div>
                     ))}
                   </div>

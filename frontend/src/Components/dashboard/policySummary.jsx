@@ -25,7 +25,6 @@ const PolicySummary = ({ aadhaar }) => {
     <div className="dashboard-card policy-summary">
       <div className="card-header">
         <h3>Policy Summary</h3>
-        <button className="action-button">Update Policy</button>
       </div>
       <div className="card-content">
         <table className="policy-table">
@@ -56,7 +55,6 @@ const PolicySummary = ({ aadhaar }) => {
                 <td>
                   <div className="action-buttons">
                     <button className="icon-button">View</button>
-                    <button className="icon-button">Edit</button>
                   </div>
                 </td>
               </tr>

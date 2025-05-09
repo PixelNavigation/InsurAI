@@ -32,6 +32,15 @@ a:hover {
   text-decoration: underline;
 }
 
+/* Remove underline from links inside buttons */
+button a,
+button a:hover,
+button a:visited,
+button a:active {
+  text-decoration: none;
+  color: inherit;
+}
+
 /* Dashboard Container */
 .dashboard-container {
   max-width: 1440px;
@@ -113,7 +122,7 @@ a:hover {
 
 /* Action Buttons */
 .action-button {
-  background-color: #3b82f6;
+  background-color: #f6e33b;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -121,6 +130,7 @@ a:hover {
   font-size: 0.85rem;
   font-weight: 500;
   transition: all 0.3s;
+  text-decoration: none;
 }
 
 .action-button:hover {
@@ -189,7 +199,7 @@ a:hover {
   color: #f59e0b;
 }
 
-.claim-status.denied {
+.claim-status.rejected {
   background-color: rgba(239, 68, 68, 0.1);
   color: #ef4444;
 }
