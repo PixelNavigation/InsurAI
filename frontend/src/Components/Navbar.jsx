@@ -6,30 +6,25 @@ import logo from '../assets/logo.png';
 const Navbar = ({ isAuthenticated, onLogout }) => {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
   const dropdownRef = useRef(null);
-  
-  const handleLoginClick = () => {
-    navigate('/login');
-  };
-  
-  const handleSignupClick = () => {
-    navigate('/signup');
-  };
-  
-  const handleLogoutClick = () => {
-    onLogout();
-    navigate('/');
-    setShowDropdown(false);
-  };
+  const lastScrollY = useRef(0);
 
-  const handleProfileClick = () => {
-    navigate('/profile');
-    setShowDropdown(false);
-  };
+  // Scroll logic to show/hide navbar
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
+        setShowNavbar(false); // Scrolling down
+      } else {
+        setShowNavbar(true); // Scrolling up
+      }
+      lastScrollY.current = currentScrollY;
+    };
 
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
-  };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -38,15 +33,12 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
         setShowDropdown(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-  
+
   return (
-    <div className='navbar'>
+    <div className={`navbar ${showNavbar ? 'visible' : 'hidden'}`}>
       <div className='logo-container'>
         <Link to="/">
           <img src={logo} alt="logo" className='logo' />
@@ -55,38 +47,31 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
       </div>
       <div className='right-section'>
         <ul>
-          {!isAuthenticated && <li><Link to="/">Home</Link></li>}
-          {isAuthenticated ? (
+          {isAuthenticated && (
             <>
               <li><Link to="/dashboard">Dashboard</Link></li>
               <li><Link to="/insurance-recommendation">Insurance Recommendation</Link></li>
               <li><Link to="/insurance-claim">Insurance Claim</Link></li>
             </>
-          ) : (
-            <li><Link to="/">Services</Link></li>
           )}
         </ul>
-        
+
         {isAuthenticated ? (
           <div className="account-container" ref={dropdownRef}>
-            <button className="account-button" onClick={toggleDropdown}>
+            <button className="account-button" onClick={() => setShowDropdown(!showDropdown)}>
               <div className="account-initials">AI</div>
             </button>
             {showDropdown && (
               <div className="account-dropdown">
-                <div className="dropdown-item" onClick={handleProfileClick}>
-                  Profile
-                </div>
-                <div className="dropdown-item" onClick={handleLogoutClick}>
-                  Logout
-                </div>
+                <div className="dropdown-item" onClick={() => navigate('/profile')}>Profile</div>
+                <div className="dropdown-item" onClick={() => { onLogout(); navigate('/'); }}>Logout</div>
               </div>
             )}
           </div>
         ) : (
           <>
-            <button className='login-button' onClick={handleLoginClick}>Login</button>
-            <button className='signup-button' onClick={handleSignupClick}>Sign Up</button>
+            <button className='login-button' onClick={() => navigate('/login')}>Login</button>
+            <button className='signup-button' onClick={() => navigate('/signup')}>Sign Up</button>
           </>
         )}
       </div>
