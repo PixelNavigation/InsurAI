@@ -59,7 +59,7 @@ a:hover {
 /* Dashboard Container */
 .dashboard-container {
   max-width: 1440px;
-  margin:  auto;
+  margin: auto;
   margin-top: 7rem;
   padding: 1.5rem;
   background-color: var(--background-light);
@@ -130,7 +130,7 @@ a:hover {
   font-size: 0.9rem;
 }
 
-.user-plan {
+.user-email {
   font-size: 0.8rem;
   color: var(--text-secondary);
 }
@@ -189,35 +189,6 @@ a:hover {
 .stat-amount {
   font-size: 1rem;
   font-weight: 500;
-}
-
-/* Tab Navigation */
-.dashboard-tabs {
-  display: flex;
-  border-bottom: 1px solid var(--border-color);
-  margin-bottom: 1.5rem;
-  overflow-x: auto;
-}
-
-.tab-button {
-  background: none;
-  border: none;
-  padding: 0.75rem 1.25rem;
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-  border-bottom: 2px solid transparent;
-  transition: all var(--transition-speed);
-  white-space: nowrap;
-}
-
-.tab-button:hover {
-  color: var(--primary-color);
-}
-
-.tab-button.active {
-  color: var(--primary-color);
-  border-bottom: 2px solid var(--primary-color);
-  font-weight: 600;
 }
 
 /* Dashboard Content */
@@ -401,45 +372,6 @@ a:hover {
 
 .secondary-button:hover {
   background-color: var(--background-light);
-}
-
-/* Recommended Actions */
-.action-item {
-  padding: 1.25rem;
-  border-radius: var(--border-radius-md);
-  margin-bottom: 1rem;
-  position: relative;
-  border-left: 4px solid transparent;
-}
-
-.action-item:last-child {
-  margin-bottom: 0;
-}
-
-.action-item.priority-high {
-  background-color: rgba(239, 68, 68, 0.05);
-  border-left-color: var(--danger-color);
-}
-
-.action-item.priority-medium {
-  background-color: rgba(245, 158, 11, 0.05);
-  border-left-color: var(--warning-color);
-}
-
-.action-item.priority-low {
-  background-color: rgba(59, 130, 246, 0.05);
-  border-left-color: var(--info-color);
-}
-
-.action-title {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.action-description {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  margin-bottom: 1rem;
 }
 
 /* Claims List */

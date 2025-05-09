@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./dashboard.css";
-import Footer from '../Components/footer'
+import Footer from '../Components/footer';
+import axios from 'axios';
+import UpdatePolicy from '../Components/update'
 
 // Dashboard Icons (using unicode characters as placeholders)
 const icons = {
@@ -11,59 +14,151 @@ const icons = {
   notification: "🔔",
   settings: "⚙️",
   support: "📞",
-  documents: "📄",
   risk: "📊",
   savings: "💰"
 };
 
-const dashboard = () => {
-  const [activeTab, setActiveTab] = useState("overview");
+const Dashboard = () => {
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    avatar: "",
+    plan: "",
+    nextPayment: ""
+  });
+
+  const navigate = useNavigate();
+
+  // Update Policy navigation handler
+  const handleUpdatePolicy = () => {
+    navigate('/update-policy');
+  };
+
+  // Edit specific policy handler
+  const handleEditPolicy = (policyId) => {
+    navigate(`/update-policy/${policyId}`);
+  };
+
+  const [policyData, setPolicyData] = useState([]);
+  const [claimData, setClaimData] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [riskScores, setRiskScores] = useState({
+    auto: 0,
+    home: 0,
+    life: 0,
+    health: 0
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   
-  // Sample data (would come from API in a real application)
-  const userData = {
-    name: "John Smith",
-    email: "john.smith@example.com",
-    avatar: "JS",
-    plan: "Premium Plan",
-    nextPayment: "May 15, 2025"
+  // Get current user from local storage
+  const getCurrentUser = () => {
+    const userEmail = localStorage.getItem('userEmail');
+    return userEmail;
+  };
+
+  // Fetch all user data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userEmail = getCurrentUser();
+        if (!userEmail) {
+          // Redirect to login if no user is found
+          // window.location.href = '/login';
+          return;
+        }
+        
+        setIsLoading(true);
+        
+        // Fetch policies for the current user
+        const policiesResponse = await axios.get(`http://localhost:5000/api/policies/${userEmail}`);
+        setPolicyData(policiesResponse.data.map(policy => ({
+          id: `POL-${policy.id}`,
+          type: policy.type,
+          status: policy.status,
+          premium: `$${policy.premium}/month`,
+          renewalDate: new Date(policy.renewal_date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          })
+        })));
+        
+        // Fetch user profile data
+        const userResponse = await axios.get(`http://localhost:5000/api/user/${userEmail}`);
+        const user = userResponse.data;
+        
+        setUserData({
+          name: user.name,
+          email: user.email,
+          avatar: user.name.split(' ').map(n => n[0]).join(''),
+          plan: user.plan || "Premium Plan",
+          nextPayment: user.next_payment || "May 15, 2025"
+        });
+        
+        // Fetch claims data
+        const claimsResponse = await axios.get(`http://localhost:5000/api/claims/${userEmail}`);
+        setClaimData(claimsResponse.data);
+        
+        // Fetch notifications
+        const notificationsResponse = await axios.get(`http://localhost:5000/api/notifications/${userEmail}`);
+        setNotifications(notificationsResponse.data);
+        
+        // Fetch risk scores
+        const riskResponse = await axios.get(`http://localhost:5000/api/risk/${userEmail}`);
+        setRiskScores(riskResponse.data);
+        
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError("Failed to load dashboard data. Please try again later.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchData();
+  }, []);
+  
+  // Function to mark all notifications as read
+  const markAllNotificationsAsRead = async () => {
+    try {
+      const userEmail = getCurrentUser();
+      await axios.put(`http://localhost:5000/api/notifications/mark-all-read/${userEmail}`);
+      
+      // Update local state
+      setNotifications(prevNotifications => 
+        prevNotifications.map(notification => ({
+          ...notification,
+          isRead: true
+        }))
+      );
+    } catch (error) {
+      console.error("Error marking notifications as read:", error);
+    }
   };
   
-  const policyData = [
-    { id: "POL-12345", type: "Auto Insurance", status: "Active", premium: "$125/month", renewalDate: "Jun 30, 2025" },
-    { id: "POL-23456", type: "Home Insurance", status: "Active", premium: "$210/month", renewalDate: "Aug 15, 2025" },
-    { id: "POL-34567", type: "Life Insurance", status: "Active", premium: "$95/month", renewalDate: "Dec 01, 2025" }
-  ];
-  
-  const claimData = [
-    { id: "CLM-78901", type: "Auto Accident", status: "Processing", amount: "$2,450", date: "Apr 25, 2025" },
-    { id: "CLM-89012", type: "Water Damage", status: "Approved", amount: "$5,800", date: "Mar 10, 2025" }
-  ];
-  
-  const notifications = [
-    { id: 1, message: "Premium payment processed successfully", date: "May 2, 2025", isRead: false },
-    { id: 2, message: "Claim #CLM-78901 has been updated", date: "Apr 30, 2025", isRead: false },
-    { id: 3, message: "Your policy document is ready for review", date: "Apr 28, 2025", isRead: true }
-  ];
-  
-  const documents = [
-    { id: "DOC-5678", name: "Auto Insurance Policy", date: "Jun 30, 2024", size: "2.4 MB" },
-    { id: "DOC-6789", name: "Home Insurance Policy", date: "Aug 15, 2024", size: "3.1 MB" },
-    { id: "DOC-7890", name: "Life Insurance Policy", date: "Dec 01, 2024", size: "1.8 MB" },
-    { id: "DOC-8901", name: "Recent Claims Report", date: "May 01, 2025", size: "0.9 MB" }
-  ];
-  
-  const riskScores = {
-    auto: 85,
-    home: 92,
-    life: 78,
-    health: 89
+  // Function to file a new claim
+  const handleFileNewClaim = () => {
+    // Redirect to claim filing page
+    // window.location.href = '/file-claim';
+    console.log("Navigating to file new claim page");
   };
-  
-  const recommendedActions = [
-    { id: 1, title: "Update Home Security", description: "Installing smart security devices could reduce your premium by up to 15%", priority: "high" },
-    { id: 2, title: "Review Auto Coverage", description: "Your current coverage may be inadequate based on your vehicle's value", priority: "medium" },
-    { id: 3, title: "Health Check-up Reminder", description: "Regular check-ups can maintain your favorable health rating", priority: "low" }
-  ];
+
+  // Calculate total monthly premium
+  const calculateTotalPremium = () => {
+    return policyData.reduce((total, policy) => {
+      const premiumValue = parseFloat(policy.premium.replace('$', '').replace('/month', ''));
+      return total + premiumValue;
+    }, 0);
+  };
+
+  if (isLoading) {
+    return <div className="loading-spinner">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
 
   return (
     <div className="dashboard-container">
@@ -71,6 +166,11 @@ const dashboard = () => {
       <div className="dashboard-header">
         <div className="dashboard-title">My Insurance Dashboard</div>
         <div className="dashboard-user-info">
+          <div className="user-avatar">{userData.avatar}</div>
+          <div className="user-details">
+            <div className="user-name">{userData.name}</div>
+            <div className="user-email">{userData.email}</div>
+          </div>
         </div>
       </div>
       
@@ -93,7 +193,9 @@ const dashboard = () => {
         <div className="stat-card coverage-health">
           <div className="stat-icon">{icons.coverage}</div>
           <div className="stat-title">Coverage Health</div>
-          <div className="stat-value">87%</div>
+          <div className="stat-value">
+            {Object.values(riskScores).reduce((sum, score) => sum + score, 0) / Object.values(riskScores).length}%
+          </div>
           <div className="stat-comparison stat-up">+3% from last assessment</div>
         </div>
         
@@ -101,46 +203,23 @@ const dashboard = () => {
           <div className="stat-icon">{icons.payment}</div>
           <div className="stat-title">Next Payment</div>
           <div className="stat-value">{userData.nextPayment}</div>
-          <div className="stat-amount">$430 total</div>
+          <div className="stat-amount">${calculateTotalPremium()} total</div>
         </div>
       </div>
       
-      {/* Tab Navigation */}
-      <div className="dashboard-tabs">
-        <button 
-          className={`tab-button ${activeTab === "overview" ? "active" : ""}`}
-          onClick={() => setActiveTab("overview")}
-        >
-          Overview
-        </button>
-        
-        <button 
-          className={`tab-button ${activeTab === "documents" ? "active" : ""}`}
-          onClick={() => setActiveTab("documents")}
-        >
-          Documents
-        </button>
-        <button 
-          className={`tab-button ${activeTab === "risk" ? "active" : ""}`}
-          onClick={() => setActiveTab("risk")}
-        >
-          Risk Assessment
-        </button>
-      </div>
-      
-      {/* Dashboard Content */}
+      {/* Dashboard Content - Scrollable Single Page */}
       <div className="dashboard-content">
-        {activeTab === "overview" && (
-          <div className="dashboard-sections">
-            {/* Left Column - Main Content */}
-            <div className="main-sections">
-              {/* Policy Summary */}
-              <div className="dashboard-card policy-summary">
-                <div className="card-header">
-                  <h3>Policy Summary</h3>
-                  <button className="action-button">Update Policy</button>
-                </div>
-                <div className="card-content">
+        <div className="dashboard-sections">
+          {/* Left Column - Main Content */}
+          <div className="main-sections">
+            {/* Policy Summary */}
+            <div className="dashboard-card policy-summary">
+              <div className="card-header">
+                <h3>Policy Summary</h3>
+                <button className="action-button" onClick={handleUpdatePolicy}>Update Policy</button>
+              </div>
+              <div className="card-content">
+                {policyData.length > 0 ? (
                   <table className="policy-table">
                     <thead>
                       <tr>
@@ -167,59 +246,168 @@ const dashboard = () => {
                           <td>
                             <div className="action-buttons">
                               <button className="icon-button">View</button>
-                              <button className="icon-button">Edit</button>
+                              <button className="icon-button" onClick={() => handleEditPolicy(policy.id)}>Edit</button>
                             </div>
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
-                </div>
-              </div>
-                            
-              {/* Recent Claims */}
-              <div className="dashboard-card recent-claims">
-                <div className="card-header">
-                  <h3>Recent Claims</h3>
-                  <button className="action-button">File New Claim</button>
-                </div>
-                <div className="card-content">
-                  {claimData.length > 0 ? (
-                    <div className="claims-list">
-                      {claimData.map(claim => (
-                        <div key={claim.id} className="claim-item">
-                          <div className="claim-header">
-                            <div className="claim-id">{claim.id}</div>
-                            <div className={`claim-status ${claim.status.toLowerCase()}`}>
-                              {claim.status}
-                            </div>
-                          </div>
-                          <div className="claim-details">
-                            <div className="claim-type">{claim.type}</div>
-                            <div className="claim-date">Filed on: {claim.date}</div>
-                            <div className="claim-amount">Amount: {claim.amount}</div>
-                          </div>
-                          <button className="secondary-button">View Details</button>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="empty-state">No recent claims</div>
-                  )}
-                </div>
+                ) : (
+                  <div className="empty-state">No active policies found</div>
+                )}
               </div>
             </div>
             
-            {/* Right Column - Sidebar */}
-            <div className="sidebar-sections">
-              {/* Notifications */}
-              <div className="dashboard-card notifications">
-                <div className="card-header">
-                  <h3>Notifications</h3>
-                  <button className="text-button">Mark all as read</button>
+            {/* Recent Claims */}
+            <div className="dashboard-card recent-claims">
+              <div className="card-header">
+                <h3>Recent Claims</h3>
+                <button className="action-button" onClick={handleFileNewClaim}>File New Claim</button>
+              </div>
+              <div className="card-content">
+                {claimData.length > 0 ? (
+                  <div className="claims-list">
+                    {claimData.map(claim => (
+                      <div key={claim.id} className="claim-item">
+                        <div className="claim-header">
+                          <div className="claim-id">{claim.id}</div>
+                          <div className={`claim-status ${claim.status.toLowerCase()}`}>
+                            {claim.status}
+                          </div>
+                        </div>
+                        <div className="claim-details">
+                          <div className="claim-type">{claim.type}</div>
+                          <div className="claim-date">Filed on: {claim.date}</div>
+                          <div className="claim-amount">Amount: {claim.amount}</div>
+                        </div>
+                        <button className="secondary-button">View Details</button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="empty-state">No recent claims</div>
+                )}
+              </div>
+            </div>
+            
+            {/* Risk Assessment Section */}
+            <div className="dashboard-card risk-assessment">
+              <div className="card-header">
+                <h3>Risk Assessment</h3>
+                <button className="secondary-button">Update Information</button>
+              </div>
+              <div className="card-content">
+                <div className="risk-overview">
+                  <div className="risk-card">
+                    <div className="risk-title">Overall Risk Score</div>
+                    <div className="risk-score-circle">
+                      <div className="risk-score">
+                        {Math.round(Object.values(riskScores).reduce((sum, score) => sum + score, 0) / Object.values(riskScores).length)}
+                      </div>
+                    </div>
+                    <div className="risk-description">Very Good</div>
+                  </div>
+                  
+                  <div className="risk-factors">
+                    <h3>Risk Factors by Category</h3>
+                    <div className="risk-factor-bars">
+                      <div className="risk-factor">
+                        <div className="factor-label">Auto Insurance</div>
+                        <div className="factor-bar-container">
+                          <div 
+                            className="factor-bar" 
+                            style={{ width: `${riskScores.auto}%` }}
+                          ></div>
+                          <span className="factor-value">{riskScores.auto}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="risk-factor">
+                        <div className="factor-label">Home Insurance</div>
+                        <div className="factor-bar-container">
+                          <div 
+                            className="factor-bar" 
+                            style={{ width: `${riskScores.home}%` }}
+                          ></div>
+                          <span className="factor-value">{riskScores.home}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="risk-factor">
+                        <div className="factor-label">Life Insurance</div>
+                        <div className="factor-bar-container">
+                          <div 
+                            className="factor-bar" 
+                            style={{ width: `${riskScores.life}%` }}
+                          ></div>
+                          <span className="factor-value">{riskScores.life}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="risk-factor">
+                        <div className="factor-label">Health Insurance</div>
+                        <div className="factor-bar-container">
+                          <div 
+                            className="factor-bar" 
+                            style={{ width: `${riskScores.health}%` }}
+                          ></div>
+                          <span className="factor-value">{riskScores.health}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="card-content">
-                  {notifications.map(notification => (
+                
+                <div className="risk-recommendations">
+                  <h3>Recommendations to Improve Your Score</h3>
+                  <div className="recommendations-list">
+                    <div className="recommendation-item">
+                      <div className="recommendation-header">
+                        <div className="recommendation-title">Install Smart Home Security</div>
+                        <div className="recommendation-impact">+5 points</div>
+                      </div>
+                      <div className="recommendation-description">
+                        Adding a modern security system can reduce your home insurance risk.
+                      </div>
+                    </div>
+                    
+                    <div className="recommendation-item">
+                      <div className="recommendation-header">
+                        <div className="recommendation-title">Defensive Driving Course</div>
+                        <div className="recommendation-impact">+3 points</div>
+                      </div>
+                      <div className="recommendation-description">
+                        Complete a certified defensive driving course to improve your auto risk profile.
+                      </div>
+                    </div>
+                    
+                    <div className="recommendation-item">
+                      <div className="recommendation-header">
+                        <div className="recommendation-title">Annual Health Checkup</div>
+                        <div className="recommendation-impact">+4 points</div>
+                      </div>
+                      <div className="recommendation-description">
+                        Regular health checkups can maintain or improve your health insurance rating.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            
+          {/* Right Column - Sidebar */}
+          <div className="sidebar-sections">
+            {/* Notifications */}
+            <div className="dashboard-card notifications">
+              <div className="card-header">
+                <h3>Notifications</h3>
+                <button className="text-button" onClick={markAllNotificationsAsRead}>Mark all as read</button>
+              </div>
+              <div className="card-content">
+                {notifications.length > 0 ? (
+                  notifications.map(notification => (
                     <div 
                       key={notification.id} 
                       className={`notification-item ${!notification.isRead ? 'unread' : ''}`}
@@ -227,202 +415,55 @@ const dashboard = () => {
                       <div className="notification-message">{notification.message}</div>
                       <div className="notification-date">{notification.date}</div>
                     </div>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Quick Actions */}
-              <div className="dashboard-card quick-actions">
-                <div className="card-header">
-                  <h3>Quick Actions</h3>
-                </div>
-                <div className="card-content action-buttons-grid">
-                  <button className="quick-action-button">
-                    <span className="action-icon">{icons.payment}</span>
-                    Make Payment
-                  </button>
-                  <button className="quick-action-button">
-                    <span className="action-icon">{icons.claims}</span>
-                    File Claim
-                  </button>
-                  <button className="quick-action-button">
-                    <span className="action-icon">{icons.documents}</span>
-                    Upload Document
-                  </button>
-                  <button className="quick-action-button">
-                    <span className="action-icon">{icons.support}</span>
-                    Contact Support
-                  </button>
-                </div>
-              </div>
-              
-              {/* Premium Savings */}
-              <div className="dashboard-card premium-savings">
-                <div className="card-header">
-                  <h3>Premium Savings</h3>
-                </div>
-                <div className="savings-content">
-                  <div className="savings-icon">{icons.savings}</div>
-                  <div className="savings-title">Potential Savings</div>
-                  <div className="savings-amount">$320/year</div>
-                  <div className="savings-description">
-                    Bundle your home and auto insurance to save up to 15%
-                  </div>
-                  <button className="primary-button">View Options</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}   
-        
-        {activeTab === "documents" && (
-          <div className="documents-section">
-            <div className="section-header">
-              <h2>Insurance Documents</h2>
-              <div className="header-actions">
-                <button className="primary-button">Upload Document</button>
-                <div className="search-box">
-                  <input type="text" placeholder="Search documents..." />
-                  <button className="search-button">Search</button>
-                </div>
+                  ))
+                ) : (
+                  <div className="empty-state">No notifications</div>
+                )}
               </div>
             </div>
             
-            <div className="documents-table-container">
-              <table className="documents-table">
-                <thead>
-                  <tr>
-                    <th>Document ID</th>
-                    <th>Name</th>
-                    <th>Date</th>
-                    <th>Size</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {documents.map(doc => (
-                    <tr key={doc.id}>
-                      <td>{doc.id}</td>
-                      <td>{doc.name}</td>
-                      <td>{doc.date}</td>
-                      <td>{doc.size}</td>
-                      <td>
-                        <div className="table-actions">
-                          <button className="icon-button">View</button>
-                          <button className="icon-button">Download</button>
-                          <button className="icon-button">Share</button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-        
-        {activeTab === "risk" && (
-          <div className="risk-section">
-            <div className="section-header">
-              <h2>Risk Assessment</h2>
-              <button className="secondary-button">Update Information</button>
-            </div>
-            
-            <div className="risk-overview">
-              <div className="risk-card">
-                <div className="risk-title">Overall Risk Score</div>
-                <div className="risk-score-circle">
-                  <div className="risk-score">86</div>
-                </div>
-                <div className="risk-description">Very Good</div>
+            {/* Quick Actions */}
+            <div className="dashboard-card quick-actions">
+              <div className="card-header">
+                <h3>Quick Actions</h3>
               </div>
-              
-              <div className="risk-factors">
-                <h3>Risk Factors by Category</h3>
-                <div className="risk-factor-bars">
-                  <div className="risk-factor">
-                    <div className="factor-label">Auto Insurance</div>
-                    <div className="factor-bar-container">
-                      <div 
-                        className="factor-bar" 
-                        style={{ width: `${riskScores.auto}%` }}
-                      ></div>
-                      <span className="factor-value">{riskScores.auto}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="risk-factor">
-                    <div className="factor-label">Home Insurance</div>
-                    <div className="factor-bar-container">
-                      <div 
-                        className="factor-bar" 
-                        style={{ width: `${riskScores.home}%` }}
-                      ></div>
-                      <span className="factor-value">{riskScores.home}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="risk-factor">
-                    <div className="factor-label">Life Insurance</div>
-                    <div className="factor-bar-container">
-                      <div 
-                        className="factor-bar" 
-                        style={{ width: `${riskScores.life}%` }}
-                      ></div>
-                      <span className="factor-value">{riskScores.life}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="risk-factor">
-                    <div className="factor-label">Health Insurance</div>
-                    <div className="factor-bar-container">
-                      <div 
-                        className="factor-bar" 
-                        style={{ width: `${riskScores.health}%` }}
-                      ></div>
-                      <span className="factor-value">{riskScores.health}</span>
-                    </div>
-                  </div>
-                </div>
+              <div className="card-content action-buttons-grid">
+                <button className="quick-action-button">
+                  <span className="action-icon">{icons.payment}</span>
+                  Make Payment
+                </button>
+                <button className="quick-action-button" onClick={handleFileNewClaim}>
+                  <span className="action-icon">{icons.claims}</span>
+                  File Claim
+                </button>
+                <button className="quick-action-button">
+                  <span className="action-icon">{icons.settings}</span>
+                  Update Info
+                </button>
+                <button className="quick-action-button">
+                  <span className="action-icon">{icons.support}</span>
+                  Contact Support
+                </button>
               </div>
             </div>
             
-            <div className="risk-recommendations">
-              <h3>Recommendations to Improve Your Score</h3>
-              <div className="recommendations-list">
-                <div className="recommendation-item">
-                  <div className="recommendation-header">
-                    <div className="recommendation-title">Install Smart Home Security</div>
-                    <div className="recommendation-impact">+5 points</div>
-                  </div>
-                  <div className="recommendation-description">
-                    Adding a modern security system can reduce your home insurance risk.
-                  </div>
+            {/* Premium Savings */}
+            <div className="dashboard-card premium-savings">
+              <div className="card-header">
+                <h3>Premium Savings</h3>
+              </div>
+              <div className="savings-content">
+                <div className="savings-icon">{icons.savings}</div>
+                <div className="savings-title">Potential Savings</div>
+                <div className="savings-amount">$320/year</div>
+                <div className="savings-description">
+                  Bundle your home and auto insurance to save up to 15%
                 </div>
-                
-                <div className="recommendation-item">
-                  <div className="recommendation-header">
-                    <div className="recommendation-title">Defensive Driving Course</div>
-                    <div className="recommendation-impact">+3 points</div>
-                  </div>
-                  <div className="recommendation-description">
-                    Complete a certified defensive driving course to improve your auto risk profile.
-                  </div>
-                </div>
-                
-                <div className="recommendation-item">
-                  <div className="recommendation-header">
-                    <div className="recommendation-title">Annual Health Checkup</div>
-                    <div className="recommendation-impact">+4 points</div>
-                  </div>
-                  <div className="recommendation-description">
-                    Regular health checkups can maintain or improve your health insurance rating.
-                  </div>
-                </div>
+                <button className="primary-button">View Options</button>
               </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
       
       {/* Footer */}
@@ -431,4 +472,4 @@ const dashboard = () => {
   );
 };
 
-export default dashboard;
+export default Dashboard;
