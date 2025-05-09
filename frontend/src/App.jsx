@@ -15,7 +15,7 @@ function App() {
 
   const handleLogin = async (userData) => {
     try {
-      const response = await axios.post('https://h7xnt06d-5000.inc1.devtunnels.ms/api/login', userData);
+      const response = await axios.post('http://localhost:5000/api/login', userData);
       console.log("Login successful:", response.data);
       setIsAuthenticated(true);
       return { success: true };
@@ -27,7 +27,7 @@ function App() {
 
   const handleSignup = async (userData) => {
     try {
-      const response = await axios.post('https://h7xnt06d-5000.inc1.devtunnels.ms/api/signup', userData);
+      const response = await axios.post('http://localhost:5000/api/signup', userData);
       console.log("Signup successful:", response.data);
       setIsAuthenticated(true);
       return { success: true };

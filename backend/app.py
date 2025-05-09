@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True, resources={r"/*": {"origins": "https://h7xnt06d-5173.inc1.devtunnels.ms"}},
+CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}},
      methods=["GET", "POST", "PUT", "DELETE"],
      allow_headers=["Content-Type", "Authorization"],
      expose_headers=["Content-Type"])
