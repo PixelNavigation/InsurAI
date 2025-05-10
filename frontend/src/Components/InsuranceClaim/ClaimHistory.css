@@ -66,15 +66,15 @@
   color: white;
 }
 
-.status-badge.pending {
+.status-badge.processing {
   background-color: #f0ad4e;
 }
 
-.status-badge.approved {
+.status-badge.accepted {
   background-color: #5cb85c;
 }
 
-.status-badge.denied {
+.status-badge.rejected {
   background-color: #d9534f;
 }
 

@@ -14,8 +14,15 @@ const Riskassessment = () => {
             .then(res => res.json())
             .then(data => {
                 if (data && data.riskScores) {
-                    setRiskScores(data.riskScores);
-                    const vals = Object.values(data.riskScores);
+                    // Always set missing categories to 0
+                    const scores = {
+                        auto: data.riskScores.auto || 0,
+                        home: data.riskScores.home || 0,
+                        life: data.riskScores.life || 0,
+                        health: data.riskScores.health || 0
+                    };
+                    setRiskScores(scores);
+                    const vals = Object.values(scores);
                     const avg = vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : 0;
                     setOverall(avg);
                     setDesc(

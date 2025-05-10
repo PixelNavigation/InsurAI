@@ -30,6 +30,67 @@ const AIAssistant = () => {
     
     // Simulate AI response
     setIsTyping(true);
+
+    // Custom: If user asks about a policy, generate features, pros, cons
+    const policyExplainRegex = /explain about the following policy\s*\(([^)]+)\)/i;
+    const match = inputText.match(policyExplainRegex);
+    if (match) {
+      // Try to extract policy name
+      const policyName = match[1].trim();
+      // Simulate fetching price and features (in real app, fetch from backend)
+      let price = 0;
+      let features = [];
+      let pros = [];
+      let cons = [];
+      if (/acko/i.test(policyName) && /auto/i.test(policyName)) {
+        price = 6500;
+        features = [
+          'Cashless repairs at 5000+ garages',
+          'Zero paperwork claim process',
+          '24x7 roadside assistance',
+          'Instant policy issuance',
+          'No-claim bonus protection'
+        ];
+        pros = [
+          'Affordable premium for urban drivers',
+          'Quick digital claim settlement',
+          'Wide garage network',
+          'Good customer support'
+        ];
+        cons = [
+          'Limited add-on covers compared to some competitors',
+          'Premium may increase for high-risk locations',
+          'Some users report delays in reimbursement for rare cases'
+        ];
+      } else {
+        // Fallback generic
+        price = 8000;
+        features = [
+          'Comprehensive coverage',
+          'Easy online renewal',
+          '24x7 claim support',
+          'Add-on covers available'
+        ];
+        pros = [
+          'Good value for money',
+          'Simple claim process',
+          'Flexible plans'
+        ];
+        cons = [
+          'Premium may be higher for older vehicles',
+          'Limited offline support in rural areas'
+        ];
+      }
+      setTimeout(() => {
+        setIsTyping(false);
+        setMessages([...updatedMessages, {
+          text: `**${policyName}**\n\nPrice: ₹${price}/year\n\n**Features:**\n- ${features.join('\n- ')}\n\n**Pros:**\n- ${pros.join('\n- ')}\n\n**Cons:**\n- ${cons.join('\n- ')}`,
+          isUser: false
+        }]);
+      }, 1200);
+      return;
+    }
+
     setTimeout(() => {
       setIsTyping(false);
       let response = "I'm sorry, I don't have enough information to answer that question. Can you provide more details?";

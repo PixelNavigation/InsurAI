@@ -7,6 +7,7 @@ import Signup from './Components/auth/Signup';
 import Home from './Pages/home';
 import Dashboard from './Pages/dashboard';
 import InsuranceClaim from './Pages/InsuranceClaim';
+import AIAssistant from './Components/dashboard/AIAssistant';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -68,6 +69,8 @@ function App() {
   return (
     <Router>
       <Navbar isAuthenticated={isAuthenticated} onLogout={handleLogout} />
+      {/* AI Assistant should be available on all authenticated pages */}
+      {isAuthenticated && <AIAssistant />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />

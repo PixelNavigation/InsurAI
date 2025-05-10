@@ -182,6 +182,22 @@ def get_claims():
     ]
     return {'claims': claims_list}, 200
 
+@app.route('/api/user', methods=['GET'])
+def get_user():
+    aadhaar = request.args.get('aadhaar')
+    if not aadhaar:
+        return {'message': 'Aadhaar is required'}, 400
+    user = User.query.filter_by(aadhaar=aadhaar).first()
+    if not user:
+        return {'message': 'User not found'}, 404
+    return {
+        'user': {
+            'aadhaar': user.aadhaar,
+            'name': user.name,
+            'email': user.email
+        }
+    }, 200
+
 GEMINI_API_KEY = "AIzaSyBmbsUDW72lFLU3AybeTZg5c1bwTtPquvs"
 
 @app.route('/api/ai-assistant', methods=['POST'])

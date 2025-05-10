@@ -1,8 +1,12 @@
 import React from 'react';
 import './SubmitClaim.css';
+import AIAssistant from '../dashboard/AIAssistant';
 
 const SubmitClaim = ({ formData, handleChange, handleSubmit }) => {
   const aadhaar = localStorage.getItem('aadhaar');
+  const [policies, setPolicies] = React.useState([]);
+  const [selectedPolicyType, setSelectedPolicyType] = React.useState('');
+
   // Autofill user data from localStorage if available
   React.useEffect(() => {
     if (!aadhaar) return;
@@ -14,6 +18,14 @@ const SubmitClaim = ({ formData, handleChange, handleSubmit }) => {
           handleChange({ target: { name: 'fullName', value: data.user.name || '' } });
           handleChange({ target: { name: 'email', value: data.user.email || '' } });
           // Add more fields if your backend provides them
+        }
+      });
+    // Fetch active policies for the user
+    fetch(`http://localhost:5000/api/policies?aadhaar=${aadhaar}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.policies) {
+          setPolicies(data.policies);
         }
       });
     const name = localStorage.getItem('name') || '';
@@ -40,10 +52,58 @@ const SubmitClaim = ({ formData, handleChange, handleSubmit }) => {
     }
   }, [aadhaar]);
 
+  // Handle file input change
+  const handleFileChange = (e) => {
+    handleChange({ target: { name: 'requirementDocument', value: e.target.files[0] } });
+  };
+
+  // Update selectedPolicyType when policy changes
+  const handlePolicyChange = (e) => {
+    const selectedId = e.target.value;
+    handleChange(e);
+    const selected = policies.find((p) => String(p.PolicyID) === String(selectedId));
+    setSelectedPolicyType(selected ? selected.Type : '');
+  };
+
   return (
-    <div>
+    <div style={{position: 'relative'}}>
       <h2 className="section-title">Submit New Claim</h2>
       <form className="claim-form" onSubmit={handleSubmit}>
+        {/* Policy selection dropdown */}
+        <div className="form-group">
+          <label htmlFor="policy">Select Policy</label>
+          <select
+            id="policy"
+            name="policy"
+            value={formData.policy || ''}
+            onChange={handlePolicyChange}
+            required
+          >
+            <option value="" disabled>Select your policy</option>
+            {policies.map((policy) => (
+              policy && policy.PolicyID ? (
+                <option key={String(policy.PolicyID)} value={policy.PolicyID}>
+                  {policy.CompanyName} - {policy.Type} (#{policy.PolicyID})
+                </option>
+              ) : null
+            ))}
+          </select>
+        </div>
+
+        {/* Claim Type - only show the type for the selected policy */}
+        {selectedPolicyType && (
+          <div className="form-group">
+            <label>Claim Type</label>
+            <input
+              type="text"
+              name="claimType"
+              value={selectedPolicyType}
+              readOnly
+              className="readonly-input"
+            />
+          </div>
+        )}
+
         <div className="form-group">
           <label htmlFor="fullName">Full Name</label>
           <input
@@ -104,62 +164,6 @@ const SubmitClaim = ({ formData, handleChange, handleSubmit }) => {
           />
         </div>
 
-        <div className="claim-types-container">
-          <div className="claim-types-title">Claim Type</div>
-          <div className="checkbox-grid">
-            <div className="checkbox-item">
-              <input
-                type="checkbox"
-                id="health"
-                name="health"
-                checked={formData.claimTypes.health}
-                onChange={handleChange}
-              />
-              <label htmlFor="health">Health</label>
-            </div>
-            <div className="checkbox-item">
-              <input
-                type="checkbox"
-                id="dental"
-                name="dental"
-                checked={formData.claimTypes.dental}
-                onChange={handleChange}
-              />
-              <label htmlFor="dental">Dental</label>
-            </div>
-            <div className="checkbox-item">
-              <input
-                type="checkbox"
-                id="vision"
-                name="vision"
-                checked={formData.claimTypes.vision}
-                onChange={handleChange}
-              />
-              <label htmlFor="vision">Vision</label>
-            </div>
-            <div className="checkbox-item">
-              <input
-                type="checkbox"
-                id="shortTermDisability"
-                name="shortTermDisability"
-                checked={formData.claimTypes.shortTermDisability}
-                onChange={handleChange}
-              />
-              <label htmlFor="shortTermDisability">Short Term Disability</label>
-            </div>
-            <div className="checkbox-item">
-              <input
-                type="checkbox"
-                id="longTermDisability"
-                name="longTermDisability"
-                checked={formData.claimTypes.longTermDisability}
-                onChange={handleChange}
-              />
-              <label htmlFor="longTermDisability">Long Term Disability</label>
-            </div>
-          </div>
-        </div>
-
         <div className="form-group">
           <label htmlFor="claimDetails">Claim Details</label>
           <textarea
@@ -181,10 +185,37 @@ const SubmitClaim = ({ formData, handleChange, handleSubmit }) => {
           ></textarea>
         </div>
 
+        <div className="form-group">
+          <label htmlFor="requirementDocument">Requirement Document</label>
+          <input
+            type="file"
+            id="requirementDocument"
+            name="requirementDocument"
+            accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+            onChange={handleFileChange}
+            required
+          />
+        </div>
+
         <button type="submit" className="submit-button">
           Submit Claim
         </button>
       </form>
+      {/* Floating AI Assistant for fast typing */}
+      <div style={{position: 'fixed', bottom: 32, right: 32, zIndex: 1000}}>
+        <AIAssistant onSuggestion={(text) => {
+          // Insert suggestion into claim details
+          const textarea = document.getElementById('claimDetails');
+          if (textarea) {
+            const start = textarea.selectionStart || 0;
+            const end = textarea.selectionEnd || 0;
+            const value = textarea.value;
+            const newValue = value.slice(0, start) + text + value.slice(end);
+            textarea.value = newValue;
+            textarea.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+        }} />
+      </div>
     </div>
   );
 };

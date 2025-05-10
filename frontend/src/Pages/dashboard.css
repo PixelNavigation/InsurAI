@@ -175,6 +175,7 @@ button a:active {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .claim-id {
@@ -191,24 +192,24 @@ button a:active {
 
 .claim-status.approved {
   background-color: rgba(16, 185, 129, 0.1);
-  color: #10b981;
+  color: #ffffff;
 }
 
 .claim-status.processing {
   background-color: rgba(245, 158, 11, 0.1);
-  color: #f59e0b;
+  color: #ffffff;
 }
 
 .claim-status.rejected {
   background-color: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
+  color: #ffffff;
 }
 
 .claim-details {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-top: 0.3em;
 }
 
 .claim-type, .claim-date, .claim-amount {
@@ -259,3 +260,22 @@ button a:active {
   font-size: 0.85rem;
   color: #6b7280;
 }
+
+.claim-tag {
+  display: inline-block;
+  background: #f6e33b;
+  color: #333;
+  font-size: 0.92em;
+  font-weight: 500;
+  border-radius: 0.7em;
+  padding: 0.18em 0.85em;
+  margin-right: 0.5em;
+  margin-bottom: 0.2em;
+  letter-spacing: 0.2px;
+}
+.id-tag { background: #e0e7ff; color: #3b3b7a; }
+.policy-tag { background: #ffe0b2; color: #a15c00; }
+.company-tag { background: #e0f7fa; color: #00796b; }
+.type-tag { background: #f3e8ff; color: #7c3aed; }
+.date-tag { background: #e0f2f1; color: #00695c; }
+.amount-tag { background: #fff3e0; color: #e65100; }
