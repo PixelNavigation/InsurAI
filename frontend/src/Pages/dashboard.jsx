@@ -93,12 +93,62 @@ const dashboard = () => {
     })();
   }, [selectedClaim, claimReasons]);
   
-  const riskScores = {
-    auto: 85,
-    home: 92,
-    life: 78,
-    health: 89
-  };
+  // --- Risk Score State and Fetch ---
+  const [riskScores, setRiskScores] = useState({ auto: 0, home: 0, life: 0, health: 0 });
+  const [loadingRiskScores, setLoadingRiskScores] = useState(true);
+
+  useEffect(() => {
+    async function fetchRiskScores() {
+      setLoadingRiskScores(true);
+      try {
+        const res = await axios.get(`http://localhost:5000/api/risk-scores?aadhaar=${aadhaar}`);
+        const data = res.data && res.data.riskScores ? res.data.riskScores : {};
+        setRiskScores({
+          auto: data.auto ?? 0,
+          home: data.home ?? 0,
+          life: data.life ?? 0,
+          health: data.health ?? 0
+        });
+      } catch {
+        setRiskScores({ auto: 0, home: 0, life: 0, health: 0 });
+      }
+      setLoadingRiskScores(false);
+    }
+    if (aadhaar) fetchRiskScores();
+  }, [aadhaar]);
+
+  // Dynamic recommendations based on riskScores using AI
+  const [recommendations, setRecommendations] = useState([]);
+  const [loadingRecommendations, setLoadingRecommendations] = useState(false);
+
+  useEffect(() => {
+    async function fetchAIRecommendations() {
+      setLoadingRecommendations(true);
+      try {
+        const res = await axios.post("http://localhost:5000/api/ai-assistant", {
+          message: `Given the following insurance risk scores for a user: Auto: ${riskScores.auto}, Home: ${riskScores.home}, Life: ${riskScores.life}, Health: ${riskScores.health}, provide 3-5 actionable, specific, and personalized recommendations to help the user improve their lowest scoring categories. For each recommendation, give a title, a short impact (like '+3 points'), and a 1-2 sentence description. Return the result as a JSON array of objects with keys: title, impact, description.`
+        });
+        let aiRecs = [];
+        try {
+          // Try to parse JSON, but also handle if the AI returns a string with code block markers
+          let reply = res.data.reply;
+          if (typeof reply === 'string') {
+            // Remove markdown code block markers if present
+            reply = reply.trim().replace(/^```json[\r\n]+|```$/g, '').replace(/^```[\r\n]+|```$/g, '');
+          }
+          aiRecs = JSON.parse(reply);
+        } catch {
+          // fallback: try to extract recommendations from plain text
+          aiRecs = [{ title: 'Check AI response', impact: '', description: res.data.reply }];
+        }
+        setRecommendations(aiRecs);
+      } catch (e) {
+        setRecommendations([{ title: 'Could not fetch AI recommendations', impact: '', description: 'Please try again later.' }]);
+      }
+      setLoadingRecommendations(false);
+    }
+    fetchAIRecommendations();
+  }, [riskScores]);
 
   return (
     <div className="dashboard-container">
@@ -218,44 +268,36 @@ const dashboard = () => {
               </div>
             </div>
     
-            <Riskassessment riskScores={riskScores} />
+            {loadingRiskScores ? (
+              <div className="dashboard-card" style={{padding: '2rem', textAlign: 'center'}}>Loading risk assessment...</div>
+            ) : (
+              <Riskassessment riskScores={riskScores} />
+            )}
             
             <div className="risk-recommendations dashboard-card">
               <div className="card-header">
                 <h3>Recommendations to Improve Your Score</h3>
               </div>
               <div className="card-content">
-                <div className="recommendations-list">
-                  <div className="recommendation-item">
-                    <div className="recommendation-header">
-                      <div className="recommendation-title">Install Smart Home Security</div>
-                      <div className="recommendation-impact">+5 points</div>
-                    </div>
-                    <div className="recommendation-description">
-                      Adding a modern security system can reduce your home insurance risk.
-                    </div>
+                {loadingRecommendations ? (
+                  <div style={{padding: '1rem'}}>Loading AI recommendations...</div>
+                ) : (
+                  <div className="recommendations-list">
+                    {Array.isArray(recommendations) && recommendations.length > 0 ? (
+                      recommendations.map((rec, idx) => (
+                        <div className="recommendation-item" key={idx}>
+                          <div className="recommendation-header">
+                            <div className="recommendation-title">{rec.title}</div>
+                            {rec.impact && <div className="recommendation-impact">{rec.impact}</div>}
+                          </div>
+                          <div className="recommendation-description">{rec.description}</div>
+                        </div>
+                      ))
+                    ) : (
+                      <div>No recommendations available.</div>
+                    )}
                   </div>
-                  
-                  <div className="recommendation-item">
-                    <div className="recommendation-header">
-                      <div className="recommendation-title">Defensive Driving Course</div>
-                      <div className="recommendation-impact">+3 points</div>
-                    </div>
-                    <div className="recommendation-description">
-                      Complete a certified defensive driving course to improve your auto risk profile.
-                    </div>
-                  </div>
-                  
-                  <div className="recommendation-item">
-                    <div className="recommendation-header">
-                      <div className="recommendation-title">Annual Health Checkup</div>
-                      <div className="recommendation-impact">+4 points</div>
-                    </div>
-                    <div className="recommendation-description">
-                      Regular health checkups can maintain or improve your health insurance rating.
-                    </div>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
           </div>

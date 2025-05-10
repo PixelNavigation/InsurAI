@@ -10,14 +10,13 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
   const dropdownRef = useRef(null);
   const lastScrollY = useRef(0);
 
-  // Scroll logic to show/hide navbar
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
-        setShowNavbar(false); // Scrolling down
+        setShowNavbar(false);
       } else {
-        setShowNavbar(true); // Scrolling up
+        setShowNavbar(true);
       }
       lastScrollY.current = currentScrollY;
     };
@@ -26,7 +25,6 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {

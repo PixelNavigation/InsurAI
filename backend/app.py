@@ -24,7 +24,6 @@ class User(db.Model):
     password= db.Column(db.String(50), nullable=False)
     policies = db.relationship('policyData', backref='user', lazy=True)
 
-
 class policyData(db.Model):
     PolicyID = db.Column(db.Integer, primary_key=True)
     CompanyName = db.Column(db.String(50), nullable=False)
@@ -92,17 +91,14 @@ def signup_user():
         db.session.add(policy)
     db.session.commit()
 
-    # Create 2 to 3 random claims, at least one with status 'Rejected'
     policies = policyData.query.filter_by(aadhaar=new_user.aadhaar).all()
     num_claims = random.randint(2, 3)
     used_policy_ids = set()
-    # Ensure at least one claim is 'Rejected'
     rejected_claim_idx = random.randint(0, num_claims - 1)
     for i in range(num_claims):
         if not policies:
             break
         policy = random.choice(policies)
-        # Avoid duplicate claims for the same policy
         while policy.PolicyID in used_policy_ids and len(used_policy_ids) < len(policies):
             policy = random.choice(policies)
         used_policy_ids.add(policy.PolicyID)
@@ -163,10 +159,8 @@ def get_claims():
     user = User.query.filter_by(aadhaar=aadhaar).first()
     if not user:
         return {'message': 'User not found'}, 404
-    # Get all policies for this user
     policies = policyData.query.filter_by(aadhaar=aadhaar).all()
     policy_ids = [p.PolicyID for p in policies]
-    # Get all claims for these policies
     claims = RecentClaim.query.filter(RecentClaim.PolicyID.in_(policy_ids)).all()
     claims_list = [
         {
@@ -241,12 +235,23 @@ def ai_assistant():
 
 @app.route('/api/risk-scores', methods=['GET'])
 def get_risk_scores():
-    risk_scores = {
-        'auto': random.randint(60, 95),
-        'home': random.randint(60, 95),
-        'life': random.randint(60, 95),
-        'health': random.randint(60, 95)
+    aadhaar = request.args.get('aadhaar')
+    if not aadhaar:
+        return {'message': 'Aadhaar is required'}, 400
+    policies = policyData.query.filter_by(aadhaar=aadhaar).all()
+    owned_types = set(p.Type.lower() for p in policies)
+    type_map = {
+        'auto': 'auto',
+        'home': 'home',
+        'life': 'life',
+        'health': 'health'
     }
+    risk_scores = {}
+    for t in type_map:
+        if t in owned_types:
+            risk_scores[t] = random.randint(60, 95)
+        else:
+            risk_scores[t] = 0
     return {'riskScores': risk_scores}, 200
 
 with app.app_context():

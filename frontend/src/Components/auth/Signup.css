@@ -1,11 +1,10 @@
-/* Signup.css */
 .signup-container {
     display: flex;
     justify-content: center;
     align-items: center;
     margin: auto;
     margin-top: 7rem;
-    min-height: calc(100vh - 80px); /* Adjust based on your navbar height */
+    min-height: calc(100vh - 80px);
     padding: 2rem;
     background-color: #f9fafc;
   }
@@ -215,8 +214,7 @@
     text-decoration: underline;
     color: #4338ca;
   }
-  
-  /* Password strength indicator (optional) */
+
   .password-strength {
     margin-top: 0.25rem;
     font-size: 0.75rem;

@@ -19,25 +19,17 @@ const AIAssistant = () => {
 
   const handleSendMessage = () => {
     if (inputText.trim() === '') return;
-    
-    // Add user message
     const updatedMessages = [
       ...messages,
       { text: inputText, isUser: true }
     ];
     setMessages(updatedMessages);
     setInputText('');
-    
-    // Simulate AI response
     setIsTyping(true);
-
-    // Custom: If user asks about a policy, generate features, pros, cons
     const policyExplainRegex = /explain about the following policy\s*\(([^)]+)\)/i;
     const match = inputText.match(policyExplainRegex);
     if (match) {
-      // Try to extract policy name
       const policyName = match[1].trim();
-      // Simulate fetching price and features (in real app, fetch from backend)
       let price = 0;
       let features = [];
       let pros = [];
@@ -63,7 +55,6 @@ const AIAssistant = () => {
           'Some users report delays in reimbursement for rare cases'
         ];
       } else {
-        // Fallback generic
         price = 8000;
         features = [
           'Comprehensive coverage',
@@ -90,14 +81,10 @@ const AIAssistant = () => {
       }, 1200);
       return;
     }
-
     setTimeout(() => {
       setIsTyping(false);
       let response = "I'm sorry, I don't have enough information to answer that question. Can you provide more details?";
-      
-      // Simple pattern matching for common insurance questions
       const lowercaseInput = inputText.toLowerCase();
-      // Call backend API for AI response
       fetch('http://localhost:5000/api/ai-assistant', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -111,9 +98,7 @@ const AIAssistant = () => {
         .catch(() => {
           setMessages([...updatedMessages, { text: response, isUser: false }]);
         });
-      return; // Prevents running the local pattern matching below
-
-      // --- fallback local pattern matching (optional, can remove if always using backend) ---
+      return;
       if (lowercaseInput.includes('claim') && lowercaseInput.includes('status')) {
         response = "You can check your claim status in the 'Recent Claims' section of your dashboard. If you need more details, please click on 'View Details' next to the specific claim.";
       } else if (lowercaseInput.includes('risk score') || lowercaseInput.includes('improve score')) {
@@ -123,7 +108,6 @@ const AIAssistant = () => {
       } else if (lowercaseInput.includes('premium') || lowercaseInput.includes('payment')) {
         response = "You can view your premium details and make payments through the 'My Policies' section. Would you like me to guide you through the payment process?";
       }
-      
       setMessages([...updatedMessages, { text: response, isUser: false }]);
     }, 1000);
   };

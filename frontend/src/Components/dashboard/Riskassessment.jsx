@@ -1,39 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import './Riskassessment.css';
 
-const Riskassessment = () => {
-    const [riskScores, setRiskScores] = useState({ auto: 0, home: 0, life: 0, health: 0 });
+const Riskassessment = ({ riskScores }) => {
     const [overall, setOverall] = useState(0);
     const [desc, setDesc] = useState('');
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/risk-scores', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data && data.riskScores) {
-                    // Always set missing categories to 0
-                    const scores = {
-                        auto: data.riskScores.auto || 0,
-                        home: data.riskScores.home || 0,
-                        life: data.riskScores.life || 0,
-                        health: data.riskScores.health || 0
-                    };
-                    setRiskScores(scores);
-                    const vals = Object.values(scores);
-                    const avg = vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : 0;
-                    setOverall(avg);
-                    setDesc(
-                        avg >= 85 ? 'Very Good' :
-                        avg >= 70 ? 'Good' :
-                        avg >= 50 ? 'Average' :
-                        avg > 0 ? 'Needs Improvement' : 'N/A'
-                    );
-                }
-            });
-    }, []);
+        const vals = Object.values(riskScores || {});
+        const avg = vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : 0;
+        setOverall(avg);
+        setDesc(
+            avg >= 85 ? 'Very Good' :
+            avg >= 70 ? 'Good' :
+            avg >= 50 ? 'Average' :
+            avg > 0 ? 'Needs Improvement' : 'N/A'
+        );
+    }, [riskScores]);
 
     return (
         <div className="risk-section dashboard-card">
