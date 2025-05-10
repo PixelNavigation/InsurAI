@@ -17,6 +17,7 @@ const dashboard = () => {
   const [claimData, setClaimData] = useState([]);
   const [selectedClaim, setSelectedClaim] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [loadingComplain, setLoadingComplain] = useState(false);
 
   useEffect(() => {
     if (!aadhaar) return;
@@ -58,7 +59,9 @@ const dashboard = () => {
                     {claimData.map(claim => {
                       const isRejected = claim.status && claim.status.toLowerCase() === 'rejected';
                       const handleComplain = async () => {
+                        setLoadingComplain(true);
                         let rejectionReason = '';
+                        let problemDescription = '';
                         try {
                           const res = await axios.post("http://localhost:5000/api/ai-assistant", {
                             message: `Give only a realistic and detailed reason for rejection of this insurance claim, without any extra explanation or formatting. Only output the reason. Claim details: ${JSON.stringify(claim)}`
@@ -66,6 +69,14 @@ const dashboard = () => {
                           rejectionReason = res.data.reply || 'Not specified';
                         } catch {
                           rejectionReason = 'Not specified';
+                        }
+                        try {
+                          const descRes = await axios.post("http://localhost:5000/api/ai-assistant", {
+                            message: `Write a detailed, user-perspective explanation of the main problem with this insurance claim, as if you are the claimant explaining your own situation and why you believe the claim should not have been rejected. Use first-person language and make it sound personal. Claim details: ${JSON.stringify(claim)}`
+                          });
+                          problemDescription = descRes.data.reply || '';
+                        } catch {
+                          problemDescription = '';
                         }
                         const type = claim.type || claim.Type;
                         let proofImages = [];
@@ -84,13 +95,20 @@ const dashboard = () => {
                         }
                         let proofSection = '';
                         if (proofImages.length > 0) {
-                          proofSection = '\n\nProof Images (copy and paste these links in your browser if needed):\n' + proofImages.map((url, i) => `Image ${i+1}: ${url}`).join('\n');
+                          proofSection = '\n\nProof Images:';
+                          proofImages.forEach((url, i) => {
+                            proofSection += `\nImage ${i+1}: ${url}`;
+                          });
+                          proofSection += '\n\n(If images are not attached automatically, please download and attach them manually to this email.)';
                         }
-                        const mail = `Subject: Complaint to Insurance Ombudsman\n\nDear Sir/Madam,\n\nI would like to file a complaint regarding the rejection of my insurance claim.\n\nClaim Details:\n- Claim ID: ${claim.id || claim.clmID}\n- Policy: ${claim.PolicyID} (${claim.CompanyName})\n- Type: ${type}\n- Date Filed: ${claim.date || claim.FiledDate}\n- Amount: ${claim.amount || claim.Amount}\n- Status: ${claim.status}\n\nReason for Rejection (as provided):\n${rejectionReason}\n\nI request your intervention to review this claim.\n${proofSection}\n\nThank you.\n\nSincerely,\n[Your Name]`;
+                        const mail = `Subject: Complaint to Insurance Ombudsman\n\nDear Sir/Madam,\n\nI would like to file a complaint regarding the rejection of my insurance claim.\n\nClaim Details:\n- Claim ID: ${claim.id || claim.clmID}\n- Policy: ${claim.PolicyID} (${claim.CompanyName})\n- Type: ${type}\n- Date Filed: ${claim.date || claim.FiledDate}\n- Amount: ${claim.amount || claim.Amount}\n- Status: ${claim.status}\n\nReason for Rejection (as provided):\n${rejectionReason}\n\nDetailed Problem Description (as per my perspective):\n${problemDescription ? problemDescription : '[No detailed description available. Please add your explanation here.]'}\n${proofSection}\n\nThank you.\n\nSincerely,\n[Your Name]`;
                         await navigator.clipboard.writeText(mail);
+                        await new Promise(res => setTimeout(res, 150));
                         const subject = encodeURIComponent("Complaint to Insurance Ombudsman");
                         const body = encodeURIComponent(mail.replace(/^Subject: [^\n]+\n/, ""));
-                        window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=oio.ahmedabad@cioins.co.in&su=${subject}&body=${body}`, '_blank');
+                        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=oio.ahmedabad@cioins.co.in&su=${subject}&body=${body}`;
+                        const win = window.open(gmailUrl, '_blank', 'noopener,noreferrer');
+                        setLoadingComplain(false);
                       };
                       return (
                         <div key={claim.id || claim.clmID} className="claim-item">
@@ -112,8 +130,8 @@ const dashboard = () => {
                               <button className="secondary-button" onClick={() => { setSelectedClaim(claim); setModalOpen(true); }}>
                                 View Details
                               </button>
-                              <button className="secondary-button" onClick={handleComplain}>
-                                Complain in Council for Insurance Ombudsmen
+                              <button className="secondary-button" onClick={handleComplain} disabled={loadingComplain}>
+                                {loadingComplain ? 'AI is personalizing your complaint...' : 'Complain in Council for Insurance Ombudsmen'}
                               </button>
                             </div>
                           )}

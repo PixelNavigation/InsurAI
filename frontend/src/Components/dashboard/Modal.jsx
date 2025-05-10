@@ -43,7 +43,7 @@ const Modal = ({ claim, onClose }) => {
 
       setDescLoading(true);
       axios.post("http://localhost:5000/api/ai-assistant", {
-        message: `Okay, let's break down why your health insurance claim (Claim ID: ${claim.id || claim.clmID}, Policy ID: ${claim.PolicyID}) was rejected. Please explain in a friendly, conversational, and empathetic way, as if you are a human insurance expert talking to the claimant. Use simple language and avoid jargon. Claim details: ${JSON.stringify(claim)}`
+        message: `Write a detailed, user-perspective explanation of the main problem with this insurance claim, as if you are the claimant explaining your own situation and why you believe the claim should not have been rejected. Use first-person language and make it sound personal. Claim details: ${JSON.stringify(claim)}`
       })
         .then(res => setProblemDescription(res.data.reply || "Not specified"))
         .catch(() => setProblemDescription("Not specified"))

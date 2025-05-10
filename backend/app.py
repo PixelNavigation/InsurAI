@@ -223,6 +223,16 @@ def ai_assistant():
 
     return {'reply': reply}, 200
 
+@app.route('/api/risk-scores', methods=['GET'])
+def get_risk_scores():
+    risk_scores = {
+        'auto': random.randint(60, 95),
+        'home': random.randint(60, 95),
+        'life': random.randint(60, 95),
+        'health': random.randint(60, 95)
+    }
+    return {'riskScores': risk_scores}, 200
+
 with app.app_context():
     db.create_all()
 

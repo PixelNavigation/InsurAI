@@ -35,6 +35,7 @@ const PolicySummary = ({ aadhaar }) => {
               <th>Type</th>
               <th>Status</th>
               <th>Premium</th>
+              <th>Start Date</th>
               <th>Renewal Date</th>
               <th>Actions</th>
             </tr>
@@ -50,7 +51,8 @@ const PolicySummary = ({ aadhaar }) => {
                     {policy.Status}
                   </span>
                 </td>
-                <td>{policy.Premium}</td>
+                <td>&#8377;{policy.Premium}</td>
+                <td>{policy.StartDate || '-'}</td>
                 <td>{policy.RenewalDate}</td>
                 <td>
                   <div className="action-buttons">

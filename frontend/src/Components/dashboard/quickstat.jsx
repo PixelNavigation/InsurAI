@@ -9,7 +9,7 @@ const icons = {
   payment: "💵"
 };
 
-const quickstat = () => {
+const QuickStat = () => {
   const aadhaar = localStorage.getItem('aadhaar');
   const [policyData, setPolicyData] = useState([]);
   const [claimData, setClaimData] = useState([]);
@@ -20,14 +20,14 @@ const quickstat = () => {
     axios.get(`http://localhost:5000/api/policies?aadhaar=${aadhaar}`)
       .then(res => {
         setPolicyData(res.data.policies || []);
-        // Find the next renewal date for active policies
         const activePolicies = (res.data.policies || []).filter(p => p.Status === 'Active');
-        if (activePolicies.length > 0) {
-          // Find the soonest renewal date
-          const next = activePolicies.reduce((min, p) => {
-            return new Date(p.RenewalDate) < new Date(min.RenewalDate) ? p : min;
-          }, activePolicies[0]);
-          setNextPayment(next.RenewalDate);
+        const today = new Date();
+        const futureRenewals = activePolicies
+          .map(p => new Date(p.RenewalDate))
+          .filter(date => date >= today);
+        if (futureRenewals.length > 0) {
+          const next = futureRenewals.reduce((min, d) => d < min ? d : min, futureRenewals[0]);
+          setNextPayment(next.toISOString().slice(0, 10));
         } else {
           setNextPayment('N/A');
         }
@@ -68,4 +68,4 @@ const quickstat = () => {
   )
 }
 
-export default quickstat;
+export default QuickStat;
