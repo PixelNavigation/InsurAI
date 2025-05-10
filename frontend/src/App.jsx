@@ -11,7 +11,7 @@ import AIAssistant from './Components/dashboard/AIAssistant';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
-    !!localStorage.getItem('aadhaar') // ✅ keep user logged in after refresh
+    !!localStorage.getItem('aadhaar')
   );
 
   const handleLogin = async (userData) => {
@@ -19,12 +19,10 @@ function App() {
       const response = await axios.post('http://localhost:5000/api/login', userData);
       const { aadhaar } = response.data;
       console.log("Login successful:", response.data);
-
-      // Store Aadhaar and update auth state
       localStorage.setItem('aadhaar', aadhaar);
       setIsAuthenticated(true);
 
-      return { success: true, aadhaar }; // ✅ return aadhaar
+      return { success: true, aadhaar };
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);
       return { success: false, message: error.response?.data?.message || 'Login failed' };
@@ -35,11 +33,8 @@ function App() {
     try {
       const response = await axios.post('http://localhost:5000/api/signup', userData);
       const { aadhaar } = response.data;
-
-      // Store Aadhaar and update auth state
       localStorage.setItem('aadhaar', aadhaar);
       setIsAuthenticated(true);
-
       console.log("Signup successful:", response.data);
       return { success: true, aadhaar };
     } catch (error) {
@@ -54,8 +49,8 @@ function App() {
     } catch (error) {
       console.error("Logout failed:", error.message);
     } finally {
-      localStorage.removeItem('aadhaar'); // Clear storage
-      setIsAuthenticated(false); // Update auth
+      localStorage.removeItem('aadhaar');
+      setIsAuthenticated(false);
     }
   };
 
@@ -69,7 +64,6 @@ function App() {
   return (
     <Router>
       <Navbar isAuthenticated={isAuthenticated} onLogout={handleLogout} />
-      {/* AI Assistant should be available on all authenticated pages */}
       {isAuthenticated && <AIAssistant />}
       <Routes>
         <Route path="/" element={<Home />} />

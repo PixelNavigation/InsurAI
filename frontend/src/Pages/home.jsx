@@ -1,4 +1,3 @@
-import React from "react";
 import "./home.css";
 import Toolbox from "../Components/toolbox";
 import Footer from "../Components/footer";
@@ -7,13 +6,12 @@ const home = () => {
     <div className="home">
       <section className="banner">
         <div className="banner-heading">
-          <h1>Having</h1>
-          <h1>trouble making</h1>
-          <h1><span className="S1">insurance decisions</span> and <span className="S2">claims</span>?</h1>
+          <h1>Having trouble in</h1>
+          <h1><span className="S1">claiming</span> and <span className="S2">managing insurance</span>?</h1>
         </div>
         <div className="banner-subheading">
-          <p>Use AI and automated claim system to spot</p>
-          <p>coverage gaps and simplify complex claim process</p>
+          <p>Use AI and automated system to help</p>
+          <p>users reclaim their rejected claims and manage risk</p>
         </div>
         <a href="/login" className="banner-buttons">Try InsureAI for free <span className="Arrow">→</span></a>
       </section>
