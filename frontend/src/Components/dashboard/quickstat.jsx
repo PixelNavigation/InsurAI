@@ -5,7 +5,7 @@ import './quickstat.css';
 const icons = {
   policies: "📋",
   claims: "📝",
-  coverage: "🛡️",
+  reject: "🚫",
   payment: "💵"
 };
 
@@ -52,11 +52,11 @@ const quickstat = () => {
           <div className="stat-value">{claimData.filter(c => c.status === "Processing").length}</div>
           <div className="stat-comparison">{/* TODO: Add comparison logic if needed */}</div>
         </div>
-        <div className="stat-card coverage-health">
-          <div className="stat-icon">{icons.coverage}</div>
-          <div className="stat-title">Coverage Health</div>
-          <div className="stat-value">78%</div>
-          <div className="stat-comparison stat-up">+3% from last assessment</div>
+        <div className="stat-card rejected-claims">
+          <div className="stat-icon">{icons.reject}</div>
+          <div className="stat-title">Rejected Claims</div>
+          <div className="stat-value">{claimData.filter(c => c.status === "Rejected").length}</div>
+          <div className="stat-comparison stat-down">{/* You can add comparison logic here if needed */}</div>
         </div>
         <div className="stat-card payment-due">
           <div className="stat-icon">{icons.payment}</div>

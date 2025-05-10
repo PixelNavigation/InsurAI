@@ -2,6 +2,44 @@ import React from 'react';
 import './SubmitClaim.css';
 
 const SubmitClaim = ({ formData, handleChange, handleSubmit }) => {
+  const aadhaar = localStorage.getItem('aadhaar');
+  // Autofill user data from localStorage if available
+  React.useEffect(() => {
+    if (!aadhaar) return;
+    // Fetch user data from backend
+    fetch(`http://localhost:5000/api/user?aadhaar=${aadhaar}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.user) {
+          handleChange({ target: { name: 'fullName', value: data.user.name || '' } });
+          handleChange({ target: { name: 'email', value: data.user.email || '' } });
+          // Add more fields if your backend provides them
+        }
+      });
+    const name = localStorage.getItem('name') || '';
+    const email = localStorage.getItem('email') || '';
+    const phone = localStorage.getItem('phoneNumber') || '';
+    const address = localStorage.getItem('address') || '';
+    const cityStateZip = localStorage.getItem('cityStateZip') || '';
+    if (name || email || phone || address || cityStateZip) {
+      handleChange({
+        target: { name: 'fullName', value: name }
+      });
+      handleChange({
+        target: { name: 'email', value: email }
+      });
+      handleChange({
+        target: { name: 'phoneNumber', value: phone }
+      });
+      handleChange({
+        target: { name: 'address', value: address }
+      });
+      handleChange({
+        target: { name: 'cityStateZip', value: cityStateZip }
+      });
+    }
+  }, [aadhaar]);
+
   return (
     <div>
       <h2 className="section-title">Submit New Claim</h2>
